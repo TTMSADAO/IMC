@@ -1,322 +1,44 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IMC SMART HUB - High-Tech Medical System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --glass: rgba(255, 255, 255, 0.15);
-            --neon-purple: #a855f7;
-            --deep-purple: #6b21a8;
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #3b0764 100%);
-        }
+const SPREADSHEET_ID = 'ใส่_ID_ชีตของคุณที่นี่';
+const SHEET_NAME = 'Data';
 
-        body {
-            font-family: 'Sarabun', sans-serif;
-            background: var(--bg-gradient);
-            color: #fff;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        /* 3D Glassmorphism Cards */
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .nav-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-        }
-
-        .tab-btn {
-            background: var(--glass);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.3s;
-            white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .tab-btn.active {
-            background: var(--neon-purple);
-            box-shadow: 0 0 15px var(--neon-purple);
-        }
-
-        .card {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,255,255,0.05);
-            margin-bottom: 25px;
-        }
-
-        /* Form Styles */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
-
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9em; color: #d8b4fe; }
-        input, select, textarea {
-            width: 100%;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 10px;
-            padding: 12px;
-            color: #fff;
-            box-sizing: border-box;
-        }
-
-        .btn-ai {
-            background: linear-gradient(45deg, #ec4899, #8b5cf6);
-            border: none;
-            color: white;
-            padding: 15px;
-            border-radius: 15px;
-            width: 100%;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(236, 72, 153, 0.3);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        /* Motor Power Model */
-        .motor-model {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 20px;
-        }
-
-        .body-part {
-            fill: #4b5563;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .body-part:hover { fill: var(--neon-purple); }
-        .body-part.selected { fill: #22c55e; filter: drop-shadow(0 0 5px #22c55e); }
-
-        .tag-container { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
-        .tag {
-            background: #4c1d95;
-            padding: 2px 8px;
-            border-radius: 5px;
-            font-size: 0.8em;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .tag span { cursor: pointer; color: #ff4d4d; }
-
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div class="header">
-        <h1 style="margin:0; letter-spacing: 2px;">IMC <span style="color:var(--neon-purple)">SMART HUB</span></h1>
-        <p style="opacity:0.7">ระบบบันทึกข้อมูลผู้ป่วยระยะกลางด้วย AI อัจฉริยะ</p>
-    </div>
-
-    <div class="nav-tabs">
-        <button class="tab-btn active">ผู้ป่วยรายใหม่</button>
-        <button class="tab-btn">ครองเตียง (IPD)</button>
-        <button class="tab-btn">ผู้ป่วยทั่วไป (>3 วัน)</button>
-    </div>
-
-    <button class="btn-ai" onclick="simulateAI()">
-        <span>📷</span> ถ่ายรูปอัปโหลด (AI ดึงข้อมูลอัตโนมัติ)
-    </button>
-
-    <div class="card">
-        <h2 style="color:var(--neon-purple); font-size:1.2em; margin-top:0;">📋 ข้อมูลพื้นฐาน</h2>
-        <div class="grid">
-            <div class="form-group">
-                <label>ชื่อ-นามสกุล</label>
-                <input type="text" id="patientName" placeholder="ระบุชื่อ">
-            </div>
-            <div class="form-group">
-                <label>HN</label>
-                <input type="text" id="hn" placeholder="เลขประจำตัวผู้ป่วย">
-            </div>
-            <div class="form-group">
-                <label>เตียง (Bed)</label>
-                <input type="text" id="bed">
-            </div>
-            <div class="form-group">
-                <label>สิทธิรักษา</label>
-                <select id="rights">
-                    <option>ข้าราชการ</option>
-                    <option>บัตรทอง (UC)</option>
-                    <option>ประกันสังคม</option>
-                    <option>ชำระเงินเอง</option>
-                </select>
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2 style="color:var(--neon-purple); font-size:1.2em; margin-top:0;">🏥 การวินิจฉัยและระยะเวลา</h2>
-        <div class="grid">
-            <div class="form-group">
-                <label>วันที่แอดมิด (Adm Date)</label>
-                <input type="date" id="admDate" onchange="calculateDuration()">
-            </div>
-            <div class="form-group">
-                <label>วันที่วินิจฉัย (Diag Date)</label>
-                <input type="date" id="diagDate">
-            </div>
-            <div class="form-group">
-                <label>สถานะตอนนี้</label>
-                <input type="text" id="durationDisplay" readonly style="color:#22c55e; font-weight:bold;">
-            </div>
-            <div class="form-group">
-                <label>วันครบกำหนด 6 เดือน (Golden Period)</label>
-                <input type="text" id="sixMonthDisplay" readonly style="color:#f59e0b; font-weight:bold;">
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2 style="color:var(--neon-purple); font-size:1.2em; margin-top:0;">👤 Motor Power & ADL</h2>
-        <div class="grid">
-            <div class="motor-model">
-                <svg width="150" height="300" viewBox="0 0 100 200">
-                    <circle cx="50" cy="20" r="15" class="body-part" /> <rect x="35" y="40" width="30" height="60" rx="5" class="body-part" /> <rect x="10" y="40" width="20" height="50" rx="5" class="body-part" id="armL" onclick="selectPart('แขนซ้าย')" />
-                    <rect x="70" y="40" width="20" height="50" rx="5" class="body-part" id="armR" onclick="selectPart('แขนขวา')" />
-                    <rect x="35" y="105" width="12" height="70" rx="5" class="body-part" id="legL" onclick="selectPart('ขาซ้าย')" />
-                    <rect x="53" y="105" width="12" height="70" rx="5" class="body-part" id="legR" onclick="selectPart('ขาขวา')" />
-                </svg>
-            </div>
-            <div>
-                <label>คะแนน ADL (Barthel Index)</label>
-                <input type="number" id="adl" placeholder="0-20">
-                <label style="margin-top:20px;">ระบุ Grade Motor Power</label>
-                <div id="partLabel" style="font-size:0.8em; color:#fff; margin-bottom:5px;">คลิกที่อวัยวะในหุ่นเพื่อใส่คะแนน</div>
-                <input type="text" id="motorValue" placeholder="เช่น แขนซ้าย Grade 3">
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2 style="color:var(--neon-purple); font-size:1.2em; margin-top:0;">💡 คำแนะนำและการดูแล</h2>
-        <div class="form-group">
-            <label>อาการเบื้องต้น</label>
-            <input type="text" id="symptomInput" list="symptomHistory" placeholder="พิมพ์อาการ...">
-            <datalist id="symptomHistory">
-                <option value="แขนขาอ่อนแรงครึ่งซีก">
-                <option value="ปากเบี้ยว พูดไม่ชัด">
-                <option value="กลืนลำบาก">
-            </datalist>
-        </div>
-        <div class="grid">
-            <div class="form-group">
-                <label>นัดแพทย์แผนไทย</label>
-                <select id="thaiMed"><option>ยังไม่นัด</option><option>นัดแล้ว</option></select>
-            </div>
-            <div class="form-group">
-                <label>นัดแพทย์แผนจีน</label>
-                <select id="chineseMed"><option>ยังไม่นัด</option><option>นัดแล้ว</option></select>
-            </div>
-        </div>
-        <label>คำแนะนำการดูแล (ดึงจากฐาน IMC)</label>
-        <textarea id="advice" rows="3" readonly style="background:rgba(255,255,255,0.05)"></textarea>
-    </div>
-
-    <button class="btn-ai" style="background:var(--neon-purple); margin-top:10px;" onclick="saveData()">
-        💾 บันทึกข้อมูลลง Cloud Sheet
-    </button>
-</div>
-
-<script>
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwjD0iRXWpOs5dndTXA-FFC9UHO262aLTBBKwEfinaZfcWPUVYOsgStbvA5kVw-DGKz4A/exec';
-
-    function calculateDuration() {
-        const adm = new Date(document.getElementById('admDate').value);
-        const now = new Date();
-        
-        // คำนวณระยะเวลาที่เป็น
-        const diffTime = Math.abs(now - adm);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        const months = Math.floor(diffDays / 30);
-        const days = diffDays % 30;
-        
-        document.getElementById('durationDisplay').value = `${months} เดือน ${days} วัน (${diffDays} วัน)`;
-
-        // คำนวณ 6 เดือน
-        const sixMonth = new Date(adm);
-        sixMonth.setMonth(sixMonth.getMonth() + 6);
-        document.getElementById('sixMonthDisplay').value = sixMonth.toLocaleDateString('th-TH');
-
-        // ใส่คำแนะนำอัตโนมัติ
-        if (months < 6) {
-            document.getElementById('advice').value = "ช่วง Golden Period: เน้นกายภาพบำบัดเข้มข้น และนวดแผนไทยกระตุ้นการไหลเวียน";
-        } else {
-            document.getElementById('advice').value = "ระยะ Maintenance: เน้นการฝึกใช้ชีวิตประจำวันและการป้องกันโรคซ้ำ";
-        }
-    }
-
-    function selectPart(name) {
-        document.getElementById('partLabel').innerText = "เลือก: " + name;
-        document.getElementById('motorValue').focus();
-    }
-
-    async function simulateAI() {
-        alert("กำลังเริ่มระบบ AI Vision...");
-        // จำลองข้อมูลจากรูปถ่าย
-        document.getElementById('hn').value = "67-" + Math.floor(Math.random()*10000);
-        document.getElementById('patientName').value = "นายปัญญา มีสติ";
-        document.getElementById('rights').value = "ข้าราชการ";
-        alert("AI สกัดข้อมูลสำเร็จ!");
-    }
-
-    async function saveData() {
-        const data = {
-            action: 'save',
-            hn: document.getElementById('hn').value,
-            name: document.getElementById('patientName').value,
-            admDate: document.getElementById('admDate').value,
-            duration: document.getElementById('durationDisplay').value,
-            sixMonthDate: document.getElementById('sixMonthDisplay').value,
-            motorPower: document.getElementById('motorValue').value,
-            adlScore: document.getElementById('adl').value
-            // เพิ่มฟิลด์อื่นๆ ตามต้องการ
-        };
-
-        try {
-            const response = await fetch(GAS_URL, {
-                method: 'POST',
-                body: JSON.stringify(data)
-            });
-            alert("บันทึกข้อมูลเรียบร้อยแล้ว!");
-        } catch (e) {
-            console.error(e);
-            alert("บันทึกสำเร็จ (สถานะแอปส่งข้อมูลไปยัง Sheet แล้ว)");
-        }
-    }
-</script>
-
-</body>
-</html>
+function doPost(e) {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = ss.getSheetByName(SHEET_NAME);
+  const data = JSON.parse(e.postData.contents);
+  
+  // โหมดบันทึกข้อมูล
+  if (data.action === 'save') {
+    sheet.appendRow([
+      new Date(), data.hn, data.patientName, data.bed, data.admDate, 
+      data.duration, data.motorPower, data.adlScore, data.thaiMedStatus
+    ]);
+    return ContentService.createTextOutput(JSON.stringify({status: 'success'}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  // โหมดค้นหาข้อมูลคนไข้ (ดึงมาสร้างการ์ด)
+  if (data.action === 'search') {
+    const dataRange = sheet.getDataRange().getValues();
+    const headers = dataRange[0];
+    const rows = dataRange.slice(1);
+    
+    let results = [];
+    rows.forEach(row => {
+      // ค้นหาจาก HN หรือ ชื่อ (คอลัมน์ 1 คือ HN, 2 คือ ชื่อ)
+      if (row[1].toString().includes(data.keyword) || row[2].toString().includes(data.keyword)) {
+        results.push({
+          hn: row[1],
+          name: row[2],
+          bed: row[3],
+          admDate: row[4],
+          lastUpdate: row[0]
+        });
+      }
+    });
+    // กรองเอาเฉพาะข้อมูลล่าสุดของแต่ละ HN
+    let uniqueResults = results.reverse().filter((v, i, a) => a.findIndex(t => (t.hn === v.hn)) === i);
+    
+    return ContentService.createTextOutput(JSON.stringify({status: 'success', data: uniqueResults}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
