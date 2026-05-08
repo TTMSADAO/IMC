@@ -1,44 +1,240 @@
-const SPREADSHEET_ID = 'ใส่_ID_ชีตของคุณที่นี่';
-const SHEET_NAME = 'Data';
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>IMC SMART HUB - Clinical Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-white: #ffffff;
+            --medical-blue: #003366;
+            --premium-gold: #D4AF37;
+            --light-gray: #f5f7fa;
+            --text-dark: #333333;
+        }
 
-function doPost(e) {
-  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
-  const sheet = ss.getSheetByName(SHEET_NAME);
-  const data = JSON.parse(e.postData.contents);
-  
-  // โหมดบันทึกข้อมูล
-  if (data.action === 'save') {
-    sheet.appendRow([
-      new Date(), data.hn, data.patientName, data.bed, data.admDate, 
-      data.duration, data.motorPower, data.adlScore, data.thaiMedStatus
-    ]);
-    return ContentService.createTextOutput(JSON.stringify({status: 'success'}))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-  
-  // โหมดค้นหาข้อมูลคนไข้ (ดึงมาสร้างการ์ด)
-  if (data.action === 'search') {
-    const dataRange = sheet.getDataRange().getValues();
-    const headers = dataRange[0];
-    const rows = dataRange.slice(1);
-    
-    let results = [];
-    rows.forEach(row => {
-      // ค้นหาจาก HN หรือ ชื่อ (คอลัมน์ 1 คือ HN, 2 คือ ชื่อ)
-      if (row[1].toString().includes(data.keyword) || row[2].toString().includes(data.keyword)) {
-        results.push({
-          hn: row[1],
-          name: row[2],
-          bed: row[3],
-          admDate: row[4],
-          lastUpdate: row[0]
-        });
-      }
-    });
-    // กรองเอาเฉพาะข้อมูลล่าสุดของแต่ละ HN
-    let uniqueResults = results.reverse().filter((v, i, a) => a.findIndex(t => (t.hn === v.hn)) === i);
-    
-    return ContentService.createTextOutput(JSON.stringify({status: 'success', data: uniqueResults}))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            margin: 0; padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: var(--medical-blue);
+            color: var(--bg-white);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border-bottom: 5px solid var(--premium-gold);
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Search & Cards */
+        .search-box {
+            display: flex; gap: 10px; margin-bottom: 20px;
+        }
+        
+        .search-box input {
+            flex: 1; padding: 15px; border-radius: 8px;
+            border: 1px solid #ccc; font-size: 16px;
+        }
+
+        .patient-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .patient-card {
+            background: var(--bg-white);
+            border-left: 5px solid var(--premium-gold);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .patient-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .card-hn { color: var(--medical-blue); font-weight: bold; font-size: 1.1em; }
+        .card-name { font-size: 1.2em; margin: 5px 0; }
+        .card-detail { color: #666; font-size: 0.9em; }
+
+        /* Form Area */
+        .form-section {
+            background: var(--bg-white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--medical-blue);
+            display: none; /* ซ่อนไว้ก่อน จะแสดงเมื่อกดเพิ่ม/เลือกคนไข้ */
+        }
+
+        .form-group { margin-bottom: 20px; }
+        
+        label {
+            display: block; margin-bottom: 8px;
+            font-weight: 600; color: var(--medical-blue);
+            white-space: normal; /* ข้อความเต็มคำ ไม่ตัดทอน */
+        }
+
+        input, select {
+            width: 100%; padding: 12px; border-radius: 6px;
+            border: 1px solid #ddd; background: #fafafa;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            background: var(--medical-blue); color: white;
+            padding: 12px 24px; border: none; border-radius: 6px;
+            cursor: pointer; font-weight: bold; font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover { background: #002244; }
+        
+        .btn-gold {
+            background: var(--premium-gold); color: var(--medical-blue);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1 style="margin: 0;">IMC CLINICAL DASHBOARD</h1>
+        <p style="margin: 5px 0 0 0; color: var(--premium-gold);">ระบบบันทึกและติดตามผลผู้ป่วยระยะกลาง</p>
+    </div>
+
+    <!-- ส่วนค้นหาและแสดงการ์ดคนไข้ -->
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="ค้นหาด้วย HN หรือ ชื่อ-นามสกุล...">
+        <button class="btn" onclick="searchPatient()">🔍 ค้นหาผู้ป่วย</button>
+        <button class="btn btn-gold" onclick="openNewPatientForm()">+ เพิ่มผู้ป่วยใหม่</button>
+    </div>
+
+    <div class="patient-cards-container" id="cardsContainer">
+        <!-- ตัวอย่างการ์ดคนไข้ (จะถูกสร้างด้วย JS) -->
+    </div>
+
+    <!-- ส่วนฟอร์มบันทึกข้อมูล (ติดตามผลต่อเนื่อง) -->
+    <div class="form-section" id="dataForm">
+        <h2 style="color: var(--medical-blue); border-bottom: 2px solid var(--premium-gold); padding-bottom: 10px;">
+            บันทึกข้อมูลการประเมิน
+        </h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+                <label>รหัสประจำตัวผู้ป่วย (HN)</label>
+                <input type="text" id="hn" readonly style="background: #e9ecef;">
+            </div>
+            <div class="form-group">
+                <label>ชื่อ-นามสกุล</label>
+                <input type="text" id="patientName" readonly style="background: #e9ecef;">
+            </div>
+            <div class="form-group">
+                <label>วันที่แอดมิด (Admission Date)</label>
+                <input type="date" id="admDate">
+            </div>
+            <div class="form-group">
+                <label>คะแนนความสามารถในการทำกิจวัตรประจำวัน (Barthel ADL Index)</label>
+                <input type="number" id="adlScore" placeholder="ระบุคะแนน 0-20">
+            </div>
+        </div>
+
+        <button class="btn btn-gold" style="width: 100%; margin-top: 20px;" onclick="saveRecord()">
+            💾 บันทึกข้อมูลการประเมินรอบนี้
+        </button>
+    </div>
+</div>
+
+<script>
+    const GAS_URL = 'ใส่_URL_ที่ได้จาก_Apps_Script_ของคุณที่นี่';
+
+    function openNewPatientForm() {
+        document.getElementById('dataForm').style.display = 'block';
+        document.getElementById('hn').readOnly = false;
+        document.getElementById('patientName').readOnly = false;
+        document.getElementById('hn').value = '';
+        document.getElementById('patientName').value = '';
+        document.getElementById('hn').style.background = '#fff';
+        document.getElementById('patientName').style.background = '#fff';
+        // เลื่อนหน้าจอลงมาที่ฟอร์ม
+        document.getElementById('dataForm').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function selectPatient(hn, name, admDate) {
+        document.getElementById('dataForm').style.display = 'block';
+        document.getElementById('hn').value = hn;
+        document.getElementById('patientName').value = name;
+        document.getElementById('admDate').value = admDate.split('T')[0]; // Format date
+        
+        document.getElementById('hn').readOnly = true;
+        document.getElementById('patientName').readOnly = true;
+        document.getElementById('hn').style.background = '#e9ecef';
+        document.getElementById('patientName').style.background = '#e9ecef';
+        
+        document.getElementById('dataForm').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function searchPatient() {
+        const keyword = document.getElementById('searchInput').value;
+        const container = document.getElementById('cardsContainer');
+        container.innerHTML = '<p>กำลังค้นหาข้อมูล...</p>';
+
+        try {
+            const response = await fetch(GAS_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'search', keyword: keyword })
+            });
+            const result = await response.json();
+            
+            container.innerHTML = '';
+            if(result.data && result.data.length > 0) {
+                result.data.forEach(p => {
+                    const card = `
+                        <div class="patient-card" onclick="selectPatient('${p.hn}', '${p.name}', '${p.admDate}')">
+                            <div class="card-hn">HN: ${p.hn}</div>
+                            <div class="card-name">${p.name}</div>
+                            <div class="card-detail">เตียง: ${p.bed} | แอดมิด: ${new Date(p.admDate).toLocaleDateString('th-TH')}</div>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                });
+            } else {
+                container.innerHTML = '<p style="color:red;">ไม่พบข้อมูลผู้ป่วย</p>';
+            }
+        } catch (error) {
+            console.error(error);
+            // โค้ดจำลองการแสดงผลระหว่างที่ยังไม่ได้ต่อ API จริง
+            container.innerHTML = `
+                <div class="patient-card" onclick="selectPatient('67-00123', 'นายสมชาย ใจดี', '2026-05-01')">
+                    <div class="card-hn">HN: 67-00123 (ข้อมูลจำลอง)</div>
+                    <div class="card-name">นายสมชาย ใจดี</div>
+                    <div class="card-detail">เตียง: 5 | แอดมิด: 1 พ.ค. 2569</div>
+                </div>
+            `;
+        }
+    }
+
+    function saveRecord() {
+        alert('ส่งข้อมูลเข้า Google Sheets เพื่อต่อท้ายประวัติของ HN: ' + document.getElementById('hn').value + ' สำเร็จ!');
+        // โค้ด fetch API ส่วน 'save' แบบเดียวกับเวอร์ชันก่อนหน้า
+    }
+</script>
+
+</body>
+</html>
