@@ -11,13 +11,13 @@
     <style>
         /* 🎨 DESIGN SYSTEM & VARIABLES */
         :root {
-            --primary: #2e7d32;
-            --primary-light: #e8f5e9;
-            --secondary: #0ea5e9;
-            --bg-color: #f1f5f9;
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            var(--primary): #2e7d32; /* สีเขียวแผนก */
+            var(--primary-light): #e8f5e9;
+            var(--secondary): #0ea5e9;
+            var(--bg-color): #f1f5f9;
+            var(--glass-bg): rgba(255, 255, 255, 0.85); /* กระจกใส */
+            var(--glass-border): rgba(255, 255, 255, 0.6);
+            var(--shadow): 0 8px 32px 0 rgba(31, 38, 135, 0.08);
         }
 
         * {
@@ -28,23 +28,33 @@
         }
 
         body {
-            /* ภาพพื้นหลังใหม่: โทนใบไม้ สมุนไพร สะอาดตาและผ่อนคลาย */
-            background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=2000');
+            /* 🏥 ภาพพื้นหลังโรงพยาบาลเบลอ โทนฟ้า-ขาว สะอาดตา */
+            background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=2000');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             min-height: 100vh;
             color: #334155;
+            position: relative;
+        }
+
+        /* เพิ่ม Overlay สีฟ้า-ขาวอ่อนๆ ทับรูปพื้นหลัง เพื่อให้ตัวหนังสือบนการ์ดเด่นขึ้นและดูไม่รก */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(224,242,254,0.4) 100%);
+            z-index: -1;
         }
 
         /* 🪟 GLASSMORPHISM CLASSES */
         .glass-card {
-            background: var(--glass-bg);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 24px;
-            box-shadow: var(--shadow);
+            box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.05);
             padding: 24px;
             transition: transform 0.3s ease;
         }
@@ -68,11 +78,11 @@
         }
 
         .login-logo {
-            width: 110px; /* ปรับขนาดโลโก้ให้พอดี */
+            width: 110px;
             height: auto;
             margin-bottom: 15px;
             object-fit: contain;
-            border-radius: 50%; /* เผื่อในกรณีที่อยากให้ขอบโลโก้ดูมนเข้ากับดีไซน์ */
+            border-radius: 50%;
             background: white;
             padding: 5px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
@@ -85,10 +95,10 @@
 
         .input-group label {
             font-size: 0.9rem;
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 5px;
             display: block;
-            color: #475569;
+            color: #334155;
         }
 
         .input-glass {
@@ -96,14 +106,14 @@
             padding: 12px 15px;
             border-radius: 12px;
             border: 1px solid #cbd5e1;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             font-size: 1rem;
             outline: none;
             transition: all 0.3s;
         }
 
         .input-glass:focus {
-            border-color: var(--primary);
+            border-color: #2e7d32;
             box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
         }
 
@@ -111,7 +121,7 @@
             width: 100%;
             padding: 12px;
             border-radius: 12px;
-            background: var(--primary);
+            background: #2e7d32;
             color: white;
             border: none;
             font-size: 1rem;
@@ -128,7 +138,7 @@
 
         /* 📊 DASHBOARD SECTION (BENTO GRID) */
         #dashboard-section {
-            display: none; /* ซ่อนไว้ก่อน Login */
+            display: none;
             padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
@@ -151,7 +161,6 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            /* รูปโปรไฟล์อวาตาร์ */
             content: url('https://cdn-icons-png.flaticon.com/512/3774/3774299.png');
             background: white;
             padding: 2px;
@@ -192,9 +201,9 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.7);
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.8);
+            border: 1px solid rgba(255,255,255,0.9);
         }
 
         /* ➕ FLOATING ACTION BUTTON */
@@ -204,7 +213,7 @@
             right: 30px;
             width: 60px;
             height: 60px;
-            background: var(--primary);
+            background: #2e7d32;
             color: white;
             border-radius: 50%;
             display: flex;
@@ -229,10 +238,10 @@
 
     <section id="login-section">
         <div class="glass-card login-box">
-            <img class="login-logo" src="https://github.com/TTMSADAO/ttmed-sadao-queue/blob/PIC/%E0%B9%82%E0%B8%A5%E0%B9%82%E0%B8%81%E0%B9%89%E0%B9%81%E0%B8%9C%E0%B8%99%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%99%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B9%80%E0%B8%AA%E0%B8%99%E0%B9%88%E0%B8%AB%E0%B9%8C.png?raw=true" alt="Logo แพทย์แผนไทย">
+            <img class="login-logo" src="https://github.com/TTMSADAO/ttmed-sadao-queue/blob/PIC/%E0%B9%82%E0%B8%A5%E0%B9%82%E0%B8%81%E0%B9%89%E0%B9%81%E0%B8%9C%E0%B8%99%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%99%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B9%80%E0%B8%AA%E0%B8%99%E0%B9%88%E0%B8%AB%E0%B9%8C.png?raw=true" alt="Logo">
             
-            <h2 style="color: var(--primary); margin-bottom: 5px;">ระบบติดตามผู้ป่วย IMC</h2>
-            <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 25px;">กลุ่มงานแพทย์แผนไทย โรงพยาบาลสะเดา</p>
+            <h2 style="color: #2e7d32; margin-bottom: 5px;">ระบบติดตามผู้ป่วย IMC</h2>
+            <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 25px;">กลุ่มงานการแพทย์แผนไทยและการแพทย์ทางเลือก</p>
             
             <div class="input-group">
                 <label><i class="fa-regular fa-user"></i> ชื่อผู้ใช้งาน (Username)</label>
@@ -253,21 +262,21 @@
     <section id="dashboard-section">
         <div class="header">
             <div>
-                <h1 style="color: var(--primary);">หน้าหลัก (Dashboard)</h1>
+                <h1 style="color: #2e7d32;">หน้าหลัก (Dashboard)</h1>
                 <p style="color: #64748b;"><i class="fa-regular fa-calendar"></i> ข้อมูลอัปเดตล่าสุด: <span id="current-date"></span></p>
             </div>
             <div class="user-profile glass-card" style="padding: 10px 20px; border-radius: 50px;">
                 <img alt="User Avatar">
                 <div>
                     <h4 style="margin: 0; color: #1e293b;">สวัสดี, เจ้าหน้าที่</h4>
-                    <span style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">สิทธิ์: แอดมิน (Admin)</span>
+                    <span style="font-size: 0.8rem; color: #2e7d32; font-weight: 600;">สิทธิ์: แอดมิน (Admin)</span>
                 </div>
             </div>
         </div>
 
         <div class="bento-grid">
             <div class="glass-card bento-item-large">
-                <h3><i class="fa-solid fa-bed-pulse" style="color: var(--secondary);"></i> ผู้ป่วย IMC ที่ยังไม่จำหน่าย (Active Cases)</h3>
+                <h3><i class="fa-solid fa-bed-pulse" style="color: #0ea5e9;"></i> ผู้ป่วย IMC ที่ยังไม่จำหน่าย (Active Cases)</h3>
                 <div class="patient-list">
                     <div class="patient-item">
                         <div>
@@ -287,9 +296,9 @@
             </div>
 
             <div class="glass-card">
-                <h3><i class="fa-solid fa-clipboard-list" style="color: var(--primary);"></i> คิวนัดหมายวันนี้</h3>
+                <h3><i class="fa-solid fa-clipboard-list" style="color: #2e7d32;"></i> คิวนัดหมายวันนี้</h3>
                 <div class="patient-list">
-                    <div class="patient-item" style="border-left: 4px solid var(--primary);">
+                    <div class="patient-item" style="border-left: 4px solid #2e7d32;">
                         <div>
                             <h4>ลุงบุญมา รักษาดี</h4>
                             <p style="font-size: 0.85rem; color: #64748b;"><i class="fa-regular fa-clock"></i> 09.00 น. (2 ชม.)</p>
@@ -300,7 +309,7 @@
             </div>
 
             <div class="glass-card" style="text-align: center; display: flex; flex-direction: column; justify-content: center;">
-                <h1 style="font-size: 3rem; color: var(--primary); margin: 0;">15</h1>
+                <h1 style="font-size: 3rem; color: #2e7d32; margin: 0;">15</h1>
                 <p style="color: #64748b; font-weight: 500;">จำนวนเคสทั้งหมดเดือนนี้</p>
                 <button class="btn-primary" style="margin-top: 15px; background: #334155;"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
             </div>
@@ -312,11 +321,9 @@
     </section>
 
     <script>
-        // ตั้งคาวันที่ปัจจุบัน
         const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById('current-date').innerText = new Date().toLocaleDateString('th-TH', dateOptions);
 
-        // ฟังก์ชันจำลองการ Login (จะเชื่อมกับ Firebase ทีหลัง)
         function handleLogin() {
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
@@ -326,7 +333,6 @@
                 return;
             }
 
-            // จำลองการโหลด 1 วินาทีแบบสมจริง
             Swal.fire({
                 title: 'กำลังเข้าสู่ระบบ...',
                 allowOutsideClick: false,
@@ -335,11 +341,9 @@
 
             setTimeout(() => {
                 Swal.close();
-                // สลับหน้าจอ
                 document.getElementById('login-section').style.display = 'none';
                 document.getElementById('dashboard-section').style.display = 'block';
                 
-                // แจ้งเตือนสำเร็จมุมขวาบน
                 Swal.fire({
                     toast: true,
                     position: 'top-end',
@@ -351,7 +355,6 @@
             }, 1000);
         }
 
-        // ฟังก์ชันเมื่อกดปุ่ม + (เตรียมไว้ทำ Modal)
         function showNewPatientModal() {
             Swal.fire({
                 title: 'ลงทะเบียนผู้ป่วย IMC ใหม่',
