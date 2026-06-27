@@ -2,239 +2,359 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>IMC SMART HUB - Clinical Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no">
+    <title>IMC Thai Med - Sadao Hospital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <style>
+        /* 🎨 DESIGN SYSTEM & VARIABLES */
         :root {
-            --bg-white: #ffffff;
-            --medical-blue: #003366;
-            --premium-gold: #D4AF37;
-            --light-gray: #f5f7fa;
-            --text-dark: #333333;
+            --primary: #2e7d32;
+            --primary-light: #e8f5e9;
+            --secondary: #0ea5e9;
+            --bg-color: #f1f5f9;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Prompt', sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Sarabun', sans-serif;
-            background-color: var(--light-gray);
-            color: var(--text-dark);
-            margin: 0; padding: 20px;
+            /* ภาพพื้นหลัง Abstract สีเขียวอ่อน/คลีนๆ */
+            background-image: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: #334155;
         }
 
-        .container {
-            max-width: 1000px;
+        /* 🪟 GLASSMORPHISM CLASSES */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* 🔐 LOGIN SECTION */
+        #login-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-logo {
+            width: 90px;
+            margin-bottom: 15px;
+            /* โลโก้การแพทย์แผนไทย/สมุนไพร */
+            content: url('https://cdn-icons-png.flaticon.com/512/2966/2966327.png'); 
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: block;
+            color: #475569;
+        }
+
+        .input-glass {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-glass:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #1b5e20;
+            transform: scale(1.02);
+        }
+
+        /* 📊 DASHBOARD SECTION (BENTO GRID) */
+        #dashboard-section {
+            display: none; /* ซ่อนไว้ก่อน Login */
+            padding: 20px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         .header {
-            background: var(--medical-blue);
-            color: var(--bg-white);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            border-bottom: 5px solid var(--premium-gold);
-            margin-bottom: 25px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        /* Search & Cards */
-        .search-box {
-            display: flex; gap: 10px; margin-bottom: 20px;
-        }
-        
-        .search-box input {
-            flex: 1; padding: 15px; border-radius: 8px;
-            border: 1px solid #ccc; font-size: 16px;
-        }
-
-        .patient-cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 30px;
         }
 
-        .patient-card {
-            background: var(--bg-white);
-            border-left: 5px solid var(--premium-gold);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
         
-        .patient-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        .user-profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            /* รูปโปรไฟล์อวาตาร์ */
+            content: url('https://cdn-icons-png.flaticon.com/512/3774/3774299.png');
+            background: white;
+            padding: 2px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        .card-hn { color: var(--medical-blue); font-weight: bold; font-size: 1.1em; }
-        .card-name { font-size: 1.2em; margin: 5px 0; }
-        .card-detail { color: #666; font-size: 0.9em; }
+        /* BENTO GRID LAYOUT */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
 
-        /* Form Area */
-        .form-section {
-            background: var(--bg-white);
-            padding: 30px;
+        .bento-item-large {
+            grid-column: span 2;
+        }
+
+        /* CARD STYLES */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .bg-green { background: #dcfce7; color: #166534; }
+        .bg-yellow { background: #fef08a; color: #854d0e; }
+
+        .patient-list {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .patient-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border-top: 4px solid var(--medical-blue);
-            display: none; /* ซ่อนไว้ก่อน จะแสดงเมื่อกดเพิ่ม/เลือกคนไข้ */
+            border: 1px solid rgba(255,255,255,0.8);
         }
 
-        .form-group { margin-bottom: 20px; }
-        
-        label {
-            display: block; margin-bottom: 8px;
-            font-weight: 600; color: var(--medical-blue);
-            white-space: normal; /* ข้อความเต็มคำ ไม่ตัดทอน */
+        /* ➕ FLOATING ACTION BUTTON */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            box-shadow: 0 4px 20px rgba(46, 125, 50, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 1000;
         }
+        .fab:hover { transform: scale(1.1) rotate(90deg); }
 
-        input, select {
-            width: 100%; padding: 12px; border-radius: 6px;
-            border: 1px solid #ddd; background: #fafafa;
-            box-sizing: border-box;
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .bento-item-large { grid-column: span 1; }
+            .header { flex-direction: column; align-items: flex-start; gap: 15px; }
         }
-
-        .btn {
-            background: var(--medical-blue); color: white;
-            padding: 12px 24px; border: none; border-radius: 6px;
-            cursor: pointer; font-weight: bold; font-size: 16px;
-            transition: background 0.3s;
-        }
-        
-        .btn:hover { background: #002244; }
-        
-        .btn-gold {
-            background: var(--premium-gold); color: var(--medical-blue);
-        }
-
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1 style="margin: 0;">IMC CLINICAL DASHBOARD</h1>
-        <p style="margin: 5px 0 0 0; color: var(--premium-gold);">ระบบบันทึกและติดตามผลผู้ป่วยระยะกลาง</p>
-    </div>
-
-    <!-- ส่วนค้นหาและแสดงการ์ดคนไข้ -->
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="ค้นหาด้วย HN หรือ ชื่อ-นามสกุล...">
-        <button class="btn" onclick="searchPatient()">🔍 ค้นหาผู้ป่วย</button>
-        <button class="btn btn-gold" onclick="openNewPatientForm()">+ เพิ่มผู้ป่วยใหม่</button>
-    </div>
-
-    <div class="patient-cards-container" id="cardsContainer">
-        <!-- ตัวอย่างการ์ดคนไข้ (จะถูกสร้างด้วย JS) -->
-    </div>
-
-    <!-- ส่วนฟอร์มบันทึกข้อมูล (ติดตามผลต่อเนื่อง) -->
-    <div class="form-section" id="dataForm">
-        <h2 style="color: var(--medical-blue); border-bottom: 2px solid var(--premium-gold); padding-bottom: 10px;">
-            บันทึกข้อมูลการประเมิน
-        </h2>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div class="form-group">
-                <label>รหัสประจำตัวผู้ป่วย (HN)</label>
-                <input type="text" id="hn" readonly style="background: #e9ecef;">
+    <section id="login-section">
+        <div class="glass-card login-box">
+            <img class="login-logo" alt="Logo">
+            <h2 style="color: var(--primary); margin-bottom: 5px;">ระบบติดตามผู้ป่วย IMC</h2>
+            <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 25px;">กลุ่มงานแพทย์แผนไทย โรงพยาบาลสะเดา</p>
+            
+            <div class="input-group">
+                <label><i class="fa-regular fa-user"></i> ชื่อผู้ใช้งาน (Username)</label>
+                <input type="text" id="username" class="input-glass" placeholder="ระบุชื่อผู้ใช้งาน">
             </div>
-            <div class="form-group">
-                <label>ชื่อ-นามสกุล</label>
-                <input type="text" id="patientName" readonly style="background: #e9ecef;">
+            
+            <div class="input-group">
+                <label><i class="fa-solid fa-lock"></i> รหัสผ่าน (Password)</label>
+                <input type="password" id="password" class="input-glass" placeholder="••••••••">
             </div>
-            <div class="form-group">
-                <label>วันที่แอดมิด (Admission Date)</label>
-                <input type="date" id="admDate">
+            
+            <button class="btn-primary" onclick="handleLogin()" style="margin-top: 10px;">
+                <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ
+            </button>
+        </div>
+    </section>
+
+    <section id="dashboard-section">
+        <div class="header">
+            <div>
+                <h1 style="color: var(--primary);">หน้าหลัก (Dashboard)</h1>
+                <p style="color: #64748b;"><i class="fa-regular fa-calendar"></i> ข้อมูลอัปเดตล่าสุด: <span id="current-date"></span></p>
             </div>
-            <div class="form-group">
-                <label>คะแนนความสามารถในการทำกิจวัตรประจำวัน (Barthel ADL Index)</label>
-                <input type="number" id="adlScore" placeholder="ระบุคะแนน 0-20">
+            <div class="user-profile glass-card" style="padding: 10px 20px; border-radius: 50px;">
+                <img alt="User Avatar">
+                <div>
+                    <h4 style="margin: 0; color: #1e293b;">สวัสดี, เจ้าหน้าที่</h4>
+                    <span style="font-size: 0.8rem; color: var(--primary); font-weight: 600;">สิทธิ์: แอดมิน (Admin)</span>
+                </div>
             </div>
         </div>
 
-        <button class="btn btn-gold" style="width: 100%; margin-top: 20px;" onclick="saveRecord()">
-            💾 บันทึกข้อมูลการประเมินรอบนี้
-        </button>
-    </div>
-</div>
-
-<script>
-    const GAS_URL = 'ใส่_URL_ที่ได้จาก_Apps_Script_ของคุณที่นี่';
-
-    function openNewPatientForm() {
-        document.getElementById('dataForm').style.display = 'block';
-        document.getElementById('hn').readOnly = false;
-        document.getElementById('patientName').readOnly = false;
-        document.getElementById('hn').value = '';
-        document.getElementById('patientName').value = '';
-        document.getElementById('hn').style.background = '#fff';
-        document.getElementById('patientName').style.background = '#fff';
-        // เลื่อนหน้าจอลงมาที่ฟอร์ม
-        document.getElementById('dataForm').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function selectPatient(hn, name, admDate) {
-        document.getElementById('dataForm').style.display = 'block';
-        document.getElementById('hn').value = hn;
-        document.getElementById('patientName').value = name;
-        document.getElementById('admDate').value = admDate.split('T')[0]; // Format date
-        
-        document.getElementById('hn').readOnly = true;
-        document.getElementById('patientName').readOnly = true;
-        document.getElementById('hn').style.background = '#e9ecef';
-        document.getElementById('patientName').style.background = '#e9ecef';
-        
-        document.getElementById('dataForm').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    async function searchPatient() {
-        const keyword = document.getElementById('searchInput').value;
-        const container = document.getElementById('cardsContainer');
-        container.innerHTML = '<p>กำลังค้นหาข้อมูล...</p>';
-
-        try {
-            const response = await fetch(GAS_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: 'search', keyword: keyword })
-            });
-            const result = await response.json();
-            
-            container.innerHTML = '';
-            if(result.data && result.data.length > 0) {
-                result.data.forEach(p => {
-                    const card = `
-                        <div class="patient-card" onclick="selectPatient('${p.hn}', '${p.name}', '${p.admDate}')">
-                            <div class="card-hn">HN: ${p.hn}</div>
-                            <div class="card-name">${p.name}</div>
-                            <div class="card-detail">เตียง: ${p.bed} | แอดมิด: ${new Date(p.admDate).toLocaleDateString('th-TH')}</div>
+        <div class="bento-grid">
+            <div class="glass-card bento-item-large">
+                <h3><i class="fa-solid fa-bed-pulse" style="color: var(--secondary);"></i> ผู้ป่วย IMC ที่ยังไม่จำหน่าย (Active Cases)</h3>
+                <div class="patient-list">
+                    <div class="patient-item">
+                        <div>
+                            <h4 style="margin-bottom: 5px;">นายสมชาย ใจดี</h4>
+                            <p style="font-size: 0.85rem; color: #64748b;">วินิจฉัย: อ่อนแรงซีกซ้าย (3 เดือน)</p>
                         </div>
-                    `;
-                    container.innerHTML += card;
-                });
-            } else {
-                container.innerHTML = '<p style="color:red;">ไม่พบข้อมูลผู้ป่วย</p>';
-            }
-        } catch (error) {
-            console.error(error);
-            // โค้ดจำลองการแสดงผลระหว่างที่ยังไม่ได้ต่อ API จริง
-            container.innerHTML = `
-                <div class="patient-card" onclick="selectPatient('67-00123', 'นายสมชาย ใจดี', '2026-05-01')">
-                    <div class="card-hn">HN: 67-00123 (ข้อมูลจำลอง)</div>
-                    <div class="card-name">นายสมชาย ใจดี</div>
-                    <div class="card-detail">เตียง: 5 | แอดมิด: 1 พ.ค. 2569</div>
+                        <span class="status-badge bg-green">กำลังฟื้นฟู</span>
+                    </div>
+                    <div class="patient-item">
+                        <div>
+                            <h4 style="margin-bottom: 5px;">นางสมศรี มีสุข</h4>
+                            <p style="font-size: 0.85rem; color: #64748b;">วินิจฉัย: อัมพาตใบหน้า (5 เดือน)</p>
+                        </div>
+                        <span class="status-badge bg-yellow">ใกล้ครบกำหนด</span>
+                    </div>
                 </div>
-            `;
+            </div>
+
+            <div class="glass-card">
+                <h3><i class="fa-solid fa-clipboard-list" style="color: var(--primary);"></i> คิวนัดหมายวันนี้</h3>
+                <div class="patient-list">
+                    <div class="patient-item" style="border-left: 4px solid var(--primary);">
+                        <div>
+                            <h4>ลุงบุญมา รักษาดี</h4>
+                            <p style="font-size: 0.85rem; color: #64748b;"><i class="fa-regular fa-clock"></i> 09.00 น. (2 ชม.)</p>
+                        </div>
+                        <button class="btn-primary" style="padding: 6px 12px; width: auto; font-size: 0.85rem;">บันทึกตรวจ</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card" style="text-align: center; display: flex; flex-direction: column; justify-content: center;">
+                <h1 style="font-size: 3rem; color: var(--primary); margin: 0;">15</h1>
+                <p style="color: #64748b; font-weight: 500;">จำนวนเคสทั้งหมดเดือนนี้</p>
+                <button class="btn-primary" style="margin-top: 15px; background: #334155;"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+            </div>
+        </div>
+
+        <div class="fab" onclick="showNewPatientModal()">
+            <i class="fa-solid fa-plus"></i>
+        </div>
+    </section>
+
+    <script>
+        // ตั้งคาวันที่ปัจจุบัน
+        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('th-TH', dateOptions);
+
+        // ฟังก์ชันจำลองการ Login (จะเชื่อมกับ Firebase ทีหลัง)
+        function handleLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            if(user === "" || pass === "") {
+                Swal.fire({ icon: 'warning', title: 'แจ้งเตือน', text: 'กรุณากรอกข้อมูลให้ครบถ้วน' });
+                return;
+            }
+
+            // จำลองการโหลด 1 วินาทีแบบสมจริง
+            Swal.fire({
+                title: 'กำลังเข้าสู่ระบบ...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            setTimeout(() => {
+                Swal.close();
+                // สลับหน้าจอ
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('dashboard-section').style.display = 'block';
+                
+                // แจ้งเตือนสำเร็จมุมขวาบน
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'เข้าสู่ระบบสำเร็จ',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            }, 1000);
         }
-    }
 
-    function saveRecord() {
-        alert('ส่งข้อมูลเข้า Google Sheets เพื่อต่อท้ายประวัติของ HN: ' + document.getElementById('hn').value + ' สำเร็จ!');
-        // โค้ด fetch API ส่วน 'save' แบบเดียวกับเวอร์ชันก่อนหน้า
-    }
-</script>
-
+        // ฟังก์ชันเมื่อกดปุ่ม + (เตรียมไว้ทำ Modal)
+        function showNewPatientModal() {
+            Swal.fire({
+                title: 'ลงทะเบียนผู้ป่วย IMC ใหม่',
+                text: 'กำลังโหลดหน้าฟอร์ม (เดี๋ยวโปรแกรมเมอร์จะเขียน UI รูปคนให้ครับ!)',
+                icon: 'info',
+                confirmButtonColor: '#2e7d32'
+            });
+        }
+    </script>
 </body>
 </html>
