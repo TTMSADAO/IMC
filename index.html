@@ -9,15 +9,16 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
-        /* 🎨 DESIGN SYSTEM & VARIABLES */
+        /* 🎨 DESIGN SYSTEM (Dribbble/Blocks.so Style) */
         :root {
-            var(--primary): #2e7d32; /* สีเขียวแผนก */
-            var(--primary-light): #e8f5e9;
-            var(--secondary): #0ea5e9;
-            var(--bg-color): #f1f5f9;
-            var(--glass-bg): rgba(255, 255, 255, 0.85); /* กระจกใส */
-            var(--glass-border): rgba(255, 255, 255, 0.6);
-            var(--shadow): 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+            --primary: #2e7d32;
+            --primary-light: #e8f5e9;
+            --secondary: #0ea5e9;
+            --bg-app: #f8fafc; /* พื้นหลังข้างในแอป */
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --border-color: #e2e8f0;
         }
 
         * {
@@ -28,120 +29,111 @@
         }
 
         body {
-            /* 🏥 ภาพพื้นหลังโรงพยาบาลเบลอ โทนฟ้า-ขาว สะอาดตา */
+            /* 🏥 ภาพพื้นหลังโรงพยาบาลเบลอ โทนฟ้า-ขาว */
             background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=2000');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             min-height: 100vh;
-            color: #334155;
-            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-main);
         }
 
-        /* เพิ่ม Overlay สีฟ้า-ขาวอ่อนๆ ทับรูปพื้นหลัง เพื่อให้ตัวหนังสือบนการ์ดเด่นขึ้นและดูไม่รก */
+        /* Overlay สีฟ้า-ขาวอ่อนๆ ทับรูปพื้นหลัง */
         body::before {
             content: "";
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(224,242,254,0.4) 100%);
+            background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(224,242,254,0.6) 100%);
             z-index: -1;
         }
 
-        /* 🪟 GLASSMORPHISM CLASSES */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 24px;
-            box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.05);
-            padding: 24px;
-            transition: transform 0.3s ease;
+        /* 🪟 APP WINDOW CONTAINER (สไตล์แอป iPad/Desktop) */
+        #app-wrapper {
+            width: 95vw;
+            max-width: 1400px;
+            height: 90vh;
+            background: var(--bg-app);
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            overflow: hidden;
+            display: none; /* เปลี่ยนเป็น flex เมื่อ Login ผ่าน */
+            animation: fadeIn 0.5s ease-out;
         }
 
-        .glass-card:hover {
-            transform: translateY(-5px);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 🔐 LOGIN SECTION */
-        #login-section {
+        /* 📍 SIDEBAR NAVIGATION */
+        .sidebar {
+            width: 260px;
+            background: #ffffff;
+            border-right: 1px solid var(--border-color);
+            padding: 30px 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+        }
+
+        .brand {
+            display: flex;
             align-items: center;
-            min-height: 100vh;
-        }
-        
-        .login-box {
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding: 0 10px;
         }
 
-        .login-logo {
-            width: 110px;
-            height: auto;
-            margin-bottom: 15px;
-            object-fit: contain;
-            border-radius: 50%;
-            background: white;
-            padding: 5px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .input-group label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-            display: block;
-            color: #334155;
-        }
-
-        .input-glass {
-            width: 100%;
-            padding: 12px 15px;
+        .brand img {
+            width: 45px;
             border-radius: 12px;
-            border: 1px solid #cbd5e1;
-            background: rgba(255, 255, 255, 0.95);
-            font-size: 1rem;
-            outline: none;
-            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        .input-glass:focus {
-            border-color: #2e7d32;
-            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+        .brand h2 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            line-height: 1.2;
         }
 
-        .btn-primary {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            background: #2e7d32;
-            color: white;
-            border: none;
-            font-size: 1rem;
-            font-weight: 600;
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            padding: 14px 18px;
+            border-radius: 16px;
+            color: var(--text-sub);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
-        .btn-primary:hover {
-            background: #1b5e20;
-            transform: scale(1.02);
+        .nav-item:hover {
+            background: #f1f5f9;
+            color: var(--text-main);
         }
 
-        /* 📊 DASHBOARD SECTION (BENTO GRID) */
-        #dashboard-section {
-            display: none;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
+        .nav-item.active {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* 📊 MAIN DASHBOARD AREA */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
         }
 
         .header {
@@ -155,170 +147,341 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            background: #ffffff;
+            padding: 8px 16px 8px 8px;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         }
         
         .user-profile img {
-            width: 50px;
-            height: 50px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            content: url('https://cdn-icons-png.flaticon.com/512/3774/3774299.png');
-            background: white;
-            padding: 2px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: #f1f5f9;
         }
 
-        /* BENTO GRID LAYOUT */
+        /* 🍱 BENTO GRID & CLEAN CARDS */
         .bento-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
         }
 
-        .bento-item-large {
+        .bento-col-2 {
             grid-column: span 2;
         }
 
-        /* CARD STYLES */
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
+        .clean-card {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 28px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .bg-green { background: #dcfce7; color: #166534; }
-        .bg-yellow { background: #fef08a; color: #854d0e; }
 
+        .clean-card:hover {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        /* 📋 PATIENT LIST UI */
         .patient-list {
-            margin-top: 15px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .patient-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.9);
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid transparent;
+            transition: 0.2s;
         }
+
+        .patient-item:hover {
+            background: #ffffff;
+            border-color: var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .patient-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .patient-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        /* 🟢 STATUS BADGES */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .bg-green { background: #dcfce7; color: #166534; }
+        .bg-yellow { background: #fef08a; color: #854d0e; }
+        .bg-time { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+
+        /* 🔘 BUTTONS */
+        .btn-primary {
+            padding: 10px 20px;
+            border-radius: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+            transition: all 0.2s;
+        }
+        .btn-primary:hover { background: #1b5e20; transform: translateY(-2px); }
+
+        .btn-outline {
+            padding: 8px 16px;
+            border-radius: 12px;
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-outline:hover { background: var(--primary-light); }
 
         /* ➕ FLOATING ACTION BUTTON */
         .fab {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: #2e7d32;
+            bottom: 40px;
+            right: 40px;
+            width: 64px;
+            height: 64px;
+            background: var(--primary);
             color: white;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 24px;
-            box-shadow: 0 4px 20px rgba(46, 125, 50, 0.5);
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.4);
             cursor: pointer;
             transition: all 0.3s;
             z-index: 1000;
         }
         .fab:hover { transform: scale(1.1) rotate(90deg); }
 
-        /* Mobile Responsive */
+        /* 🔐 LOGIN SCREEN (คงรูปแบบกระจกใสไว้ เพราะอยู่นอกแอป) */
+        #login-section {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 32px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .input-glass {
+            width: 100%;
+            padding: 14px 18px;
+            margin-top: 6px;
+            margin-bottom: 20px;
+            border-radius: 16px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .input-glass:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15); }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .bento-col-2 { grid-column: span 3; }
+            .clean-card { grid-column: span 3; }
+        }
         @media (max-width: 768px) {
-            .bento-item-large { grid-column: span 1; }
-            .header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            #app-wrapper { flex-direction: column; width: 100vw; height: 100vh; border-radius: 0; margin: 0; }
+            .sidebar { width: 100%; padding: 20px; border-right: none; border-bottom: 1px solid var(--border-color); flex-direction: row; justify-content: space-between; align-items: center; }
+            .nav-menu { display: none; } /* ซ่อนเมนูบนมือถือ ชั่วคราว */
+            .brand { margin-bottom: 0; }
+            .main-content { padding: 20px; }
+            .patient-item { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .patient-item .btn-outline { width: 100%; }
         }
     </style>
 </head>
 <body>
 
+    <!-- 🔐 หน้า Login -->
     <section id="login-section">
-        <div class="glass-card login-box">
-            <img class="login-logo" src="https://github.com/TTMSADAO/ttmed-sadao-queue/blob/PIC/%E0%B9%82%E0%B8%A5%E0%B9%82%E0%B8%81%E0%B9%89%E0%B9%81%E0%B8%9C%E0%B8%99%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%99%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B9%80%E0%B8%AA%E0%B8%99%E0%B9%88%E0%B8%AB%E0%B9%8C.png?raw=true" alt="Logo">
+        <img src="https://github.com/TTMSADAO/ttmed-sadao-queue/blob/PIC/%E0%B9%82%E0%B8%A5%E0%B9%82%E0%B8%81%E0%B9%89%E0%B9%81%E0%B8%9C%E0%B8%99%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%99%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B9%80%E0%B8%AA%E0%B8%99%E0%B9%88%E0%B8%AB%E0%B9%8C.png?raw=true" 
+             style="width: 100px; margin-bottom: 15px; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <h2 style="color: var(--primary); margin-bottom: 5px; font-weight: 700;">ระบบติดตามผู้ป่วย IMC</h2>
+        <p style="color: var(--text-sub); font-size: 0.9rem; margin-bottom: 30px;">กลุ่มงานการแพทย์แผนไทยฯ โรงพยาบาลสะเดา</p>
+        
+        <div style="text-align: left;">
+            <label style="font-weight: 600; color: var(--text-main); font-size: 0.9rem;"><i class="fa-regular fa-user"></i> ชื่อผู้ใช้งาน</label>
+            <input type="text" id="username" class="input-glass" placeholder="Username">
             
-            <h2 style="color: #2e7d32; margin-bottom: 5px;">ระบบติดตามผู้ป่วย IMC</h2>
-            <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 25px;">กลุ่มงานการแพทย์แผนไทยและการแพทย์ทางเลือก</p>
-            
-            <div class="input-group">
-                <label><i class="fa-regular fa-user"></i> ชื่อผู้ใช้งาน (Username)</label>
-                <input type="text" id="username" class="input-glass" placeholder="ระบุชื่อผู้ใช้งาน">
-            </div>
-            
-            <div class="input-group">
-                <label><i class="fa-solid fa-lock"></i> รหัสผ่าน (Password)</label>
-                <input type="password" id="password" class="input-glass" placeholder="••••••••">
-            </div>
-            
-            <button class="btn-primary" onclick="handleLogin()" style="margin-top: 10px;">
-                <i class="fa-solid fa-right-to-bracket"></i> เข้าสู่ระบบ
-            </button>
+            <label style="font-weight: 600; color: var(--text-main); font-size: 0.9rem;"><i class="fa-solid fa-lock"></i> รหัสผ่าน</label>
+            <input type="password" id="password" class="input-glass" placeholder="••••••••">
         </div>
+        
+        <button class="btn-primary" onclick="handleLogin()" style="width: 100%; padding: 14px; border-radius: 16px; font-size: 1.05rem;">
+            เข้าสู่ระบบ
+        </button>
     </section>
 
-    <section id="dashboard-section">
-        <div class="header">
-            <div>
-                <h1 style="color: #2e7d32;">หน้าหลัก (Dashboard)</h1>
-                <p style="color: #64748b;"><i class="fa-regular fa-calendar"></i> ข้อมูลอัปเดตล่าสุด: <span id="current-date"></span></p>
+    <!-- 🪟 APP WINDOW (Dashboard) -->
+    <div id="app-wrapper">
+        
+        <!-- 📍 Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <img src="https://github.com/TTMSADAO/ttmed-sadao-queue/blob/PIC/%E0%B9%82%E0%B8%A5%E0%B9%82%E0%B8%81%E0%B9%89%E0%B9%81%E0%B8%9C%E0%B8%99%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%99%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B9%80%E0%B8%AA%E0%B8%99%E0%B9%88%E0%B8%AB%E0%B9%8C.png?raw=true" alt="Logo">
+                <h2>IMC<br>Sadao Hospital</h2>
             </div>
-            <div class="user-profile glass-card" style="padding: 10px 20px; border-radius: 50px;">
-                <img alt="User Avatar">
+            <ul class="nav-menu">
+                <li class="nav-item active"><i class="fa-solid fa-chart-pie"></i> ภาพรวม (Dashboard)</li>
+                <li class="nav-item"><i class="fa-regular fa-calendar-check"></i> คิวนัดหมายวันนี้</li>
+                <li class="nav-item"><i class="fa-solid fa-bed-pulse"></i> คนไข้ Active</li>
+                <li class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i> ประวัติที่จำหน่ายแล้ว</li>
+                <li class="nav-item" style="margin-top: auto; color: #ef4444;"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</li>
+            </ul>
+        </aside>
+
+        <!-- 📊 Main Content -->
+        <main class="main-content">
+            <header class="header">
                 <div>
-                    <h4 style="margin: 0; color: #1e293b;">สวัสดี, เจ้าหน้าที่</h4>
-                    <span style="font-size: 0.8rem; color: #2e7d32; font-weight: 600;">สิทธิ์: แอดมิน (Admin)</span>
+                    <h1 style="font-weight: 700;">ภาพรวมการทำงาน</h1>
+                    <p style="color: var(--text-sub); margin-top: 5px;"><i class="fa-regular fa-calendar"></i> <span id="current-date"></span></p>
                 </div>
-            </div>
-        </div>
-
-        <div class="bento-grid">
-            <div class="glass-card bento-item-large">
-                <h3><i class="fa-solid fa-bed-pulse" style="color: #0ea5e9;"></i> ผู้ป่วย IMC ที่ยังไม่จำหน่าย (Active Cases)</h3>
-                <div class="patient-list">
-                    <div class="patient-item">
-                        <div>
-                            <h4 style="margin-bottom: 5px;">นายสมชาย ใจดี</h4>
-                            <p style="font-size: 0.85rem; color: #64748b;">วินิจฉัย: อ่อนแรงซีกซ้าย (3 เดือน)</p>
-                        </div>
-                        <span class="status-badge bg-green">กำลังฟื้นฟู</span>
+                <div class="user-profile">
+                    <div style="text-align: right;">
+                        <h4 style="margin: 0; font-size: 0.95rem;">เจ้าหน้าที่</h4>
+                        <span style="font-size: 0.75rem; color: var(--primary); font-weight: 600;">Admin</span>
                     </div>
-                    <div class="patient-item">
-                        <div>
-                            <h4 style="margin-bottom: 5px;">นางสมศรี มีสุข</h4>
-                            <p style="font-size: 0.85rem; color: #64748b;">วินิจฉัย: อัมพาตใบหน้า (5 เดือน)</p>
+                    <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" alt="User Avatar">
+                </div>
+            </header>
+
+            <div class="bento-grid">
+                
+                <!-- กล่อง 1: คิวนัดหมาย (กว้าง 2 ส่วน) -->
+                <div class="clean-card bento-col-2">
+                    <div class="card-header">
+                        <div style="background: var(--primary-light); padding: 8px; border-radius: 12px; color: var(--primary);"><i class="fa-regular fa-calendar-check"></i></div>
+                        คิวนัดหมายวันนี้
+                    </div>
+                    <div class="patient-list">
+                        <div class="patient-item">
+                            <div class="patient-info">
+                                <div class="patient-avatar" style="background:#e0f2fe; color:#0284c7;">บ</div>
+                                <div>
+                                    <h4 style="font-size: 1.05rem;">ลุงบุญมา รักษาดี</h4>
+                                    <span class="status-badge bg-time" style="margin-top: 6px;"><i class="fa-regular fa-clock"></i> 09.00 น. (2 ชม.)</span>
+                                </div>
+                            </div>
+                            <button class="btn-outline">บันทึกตรวจ</button>
                         </div>
-                        <span class="status-badge bg-yellow">ใกล้ครบกำหนด</span>
+                        <div class="patient-item">
+                            <div class="patient-info">
+                                <div class="patient-avatar" style="background:#fce7f3; color:#db2777;">ส</div>
+                                <div>
+                                    <h4 style="font-size: 1.05rem;">ป้าสมหวัง มีสุข</h4>
+                                    <span class="status-badge bg-time" style="margin-top: 6px;"><i class="fa-regular fa-clock"></i> 13.00 น. (1 ชม.)</span>
+                                </div>
+                            </div>
+                            <button class="btn-outline">บันทึกตรวจ</button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="glass-card">
-                <h3><i class="fa-solid fa-clipboard-list" style="color: #2e7d32;"></i> คิวนัดหมายวันนี้</h3>
-                <div class="patient-list">
-                    <div class="patient-item" style="border-left: 4px solid #2e7d32;">
-                        <div>
-                            <h4>ลุงบุญมา รักษาดี</h4>
-                            <p style="font-size: 0.85rem; color: #64748b;"><i class="fa-regular fa-clock"></i> 09.00 น. (2 ชม.)</p>
+                <!-- กล่อง 2: สถิติ -->
+                <div class="clean-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div class="card-header" style="margin-bottom: 10px;">
+                            <div style="background: #f1f5f9; padding: 8px; border-radius: 12px; color: #475569;"><i class="fa-solid fa-chart-line"></i></div>
+                            เคสรับใหม่เดือนนี้
                         </div>
-                        <button class="btn-primary" style="padding: 6px 12px; width: auto; font-size: 0.85rem;">บันทึกตรวจ</button>
+                        <h1 style="font-size: 4rem; color: var(--primary); line-height: 1;">15</h1>
+                        <p style="color: var(--text-sub); font-weight: 500;">ราย</p>
+                    </div>
+                    <button class="btn-primary" style="width: 100%; background: #334155; margin-top: 20px;"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                </div>
+
+                <!-- กล่อง 3: คนไข้ Active (กว้างเต็ม) -->
+                <div class="clean-card bento-col-2" style="grid-column: span 3;">
+                    <div class="card-header">
+                        <div style="background: #e0f2fe; padding: 8px; border-radius: 12px; color: #0284c7;"><i class="fa-solid fa-bed-pulse"></i></div>
+                        ผู้ป่วย IMC (Active Cases)
+                    </div>
+                    <div class="patient-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+                        <div class="patient-item">
+                            <div class="patient-info">
+                                <div class="patient-avatar">ส</div>
+                                <div>
+                                    <h4 style="font-size: 1.05rem;">นายสมชาย ใจดี</h4>
+                                    <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: 4px;">อ่อนแรงซีกซ้าย (3 เดือน)</p>
+                                </div>
+                            </div>
+                            <span class="status-badge bg-green">🟢 ฟื้นฟู</span>
+                        </div>
+                        <div class="patient-item">
+                            <div class="patient-info">
+                                <div class="patient-avatar">ว</div>
+                                <div>
+                                    <h4 style="font-size: 1.05rem;">นางวันดี สุขใจ</h4>
+                                    <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: 4px;">อัมพาตใบหน้า (5 เดือน)</p>
+                                </div>
+                            </div>
+                            <span class="status-badge bg-yellow">🟡 ใกล้ครบ</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="glass-card" style="text-align: center; display: flex; flex-direction: column; justify-content: center;">
-                <h1 style="font-size: 3rem; color: #2e7d32; margin: 0;">15</h1>
-                <p style="color: #64748b; font-weight: 500;">จำนวนเคสทั้งหมดเดือนนี้</p>
-                <button class="btn-primary" style="margin-top: 15px; background: #334155;"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
             </div>
-        </div>
+        </main>
+    </div>
 
-        <div class="fab" onclick="showNewPatientModal()">
-            <i class="fa-solid fa-plus"></i>
-        </div>
-    </section>
+    <!-- ➕ ปุ่มลงทะเบียนคนไข้ใหม่ -->
+    <div class="fab" onclick="showNewPatientModal()" id="fab-btn" style="display: none;">
+        <i class="fa-solid fa-plus"></i>
+    </div>
 
     <script>
         const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -334,7 +497,7 @@
             }
 
             Swal.fire({
-                title: 'กำลังเข้าสู่ระบบ...',
+                title: 'กำลังตรวจสอบข้อมูล...',
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
@@ -342,7 +505,8 @@
             setTimeout(() => {
                 Swal.close();
                 document.getElementById('login-section').style.display = 'none';
-                document.getElementById('dashboard-section').style.display = 'block';
+                document.getElementById('app-wrapper').style.display = 'flex';
+                document.getElementById('fab-btn').style.display = 'flex';
                 
                 Swal.fire({
                     toast: true,
@@ -352,7 +516,7 @@
                     showConfirmButton: false,
                     timer: 2000
                 });
-            }, 1000);
+            }, 800);
         }
 
         function showNewPatientModal() {
