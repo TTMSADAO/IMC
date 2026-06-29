@@ -73,9 +73,20 @@
 
         /* 📋 ASSESSMENT MODAL (Phase 4) */
         .modal-full-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; animation: fadeIn 0.3s; }
-        .assessment-card { background: #f8fafc; width: 90vw; max-width: 900px; height: 90vh; border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
-        .assessment-header { background: white; padding: 20px 30px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
-        .assessment-body { padding: 30px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        
+        .assessment-card { background: #f8fafc; width: 90vw; max-width: 900px; height: 90vh; max-height: 90vh; border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
+        
+        /* 1. เอา sticky ออก และใช้ flex-shrink: 0 เพื่อล็อค Header ไม่ให้โดนบีบ */
+        .assessment-header { background: white; padding: 20px 30px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; z-index: 10; }
+        
+        /* 2. เพิ่ม min-height: 0 และ flex: 1 1 auto ปลดล็อคให้ Scroll ได้ 100% */
+        .assessment-body { padding: 30px; overflow-y: auto; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 15px; }
+        
+        /* 3. ตกแต่ง Scrollbar ให้ดูมินิมอล (เฉพาะบนคอมพิวเตอร์) */
+        .assessment-body::-webkit-scrollbar { width: 8px; }
+        .assessment-body::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .assessment-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .assessment-body::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
         /* Accordion */
         .accordion-item { background: white; border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; }
