@@ -388,22 +388,63 @@
 
         function mockLoadHistory() { Swal.fire({title: 'ดึงข้อมูลสำเร็จ', icon: 'success', timer: 1500, showConfirmButton: false}); document.querySelector(`input[name="bi0"][value="2"]`).checked = true; calcBI(); }
         
+        // 🚀 ฟังก์ชัน AI สรุปเป็นรูปแบบ SOAP Note 
         function mockAISummary() {
-            Swal.fire({title: 'AI กำลังวิเคราะห์...', didOpen: ()=>{Swal.showLoading()}});
-            let txList = []; TX_ITEMS.forEach((tx, i) => { if(document.getElementById(`chk-tx-${i}`).checked) txList.push(tx); });
-            let medList = []; MED_ITEMS.forEach((med, i) => { if(document.getElementById(`chk-med-${i}`).checked) medList.push(med); });
+            Swal.fire({title: 'กำลังจัดเรียงข้อความ...', didOpen: ()=>{Swal.showLoading()}});
+            
             setTimeout(() => { 
-                let text = `CC/HPI: ผู้ป่วย ${document.getElementById('frm-name').value} เข้ารับการฟื้นฟู IMC\n`;
-                text += `Motor Power: L (${document.querySelector('.mp-la').value}, ${document.querySelector('.mp-ll').value}) | R (${document.querySelector('.mp-ra').value}, ${document.querySelector('.mp-rl').value})\n`;
-                text += `BI Score: ${document.getElementById('bi-score-badge').innerText.split(' ')[1]} คะแนน\n`;
-                text += `Plan: ${txList.length > 0 ? txList.join(', ') : 'ไม่มี'} | จ่ายยา: ${medList.length > 0 ? medList.join(', ') : 'ไม่ได้จ่าย'}`;
-                document.getElementById('hosxp-box').value = text; Swal.close(); 
-            }, 1000);
+                let cc = document.getElementById('frm-cc').value || "-";
+                let bp = document.getElementById('frm-bp').value || "-";
+                let pr = document.getElementById('frm-pr').value || "-";
+
+                let peAbnormal = [];
+                document.querySelectorAll('.pe-select-box').forEach((sel, i) => {
+                    if(sel.value !== "ปกติ" && sel.value !== "ประเมินไม่ได้") peAbnormal.push(`${PE_ITEMS[i]}: ${sel.value}`);
+                });
+                let peText = peAbnormal.length > 0 ? peAbnormal.join(', ') : "ปกติทุกระบบ";
+
+                let mpText = `ขวา (แขน ${document.querySelector('.mp-ra').value}, ขา ${document.querySelector('.mp-rl').value}) | ซ้าย (แขน ${document.querySelector('.mp-la').value}, ขา ${document.querySelector('.mp-ll').value})`;
+
+                let impList = [];
+                IMPAIRMENTS.forEach(imp => { 
+                    if(document.getElementById(`chk-${imp.id}`).checked) {
+                        let detail = document.getElementById(`detail-${imp.id}`).value;
+                        let title = imp.title.split('.')[1].trim(); 
+                        impList.push(detail ? `${title}(${detail})` : title);
+                    }
+                });
+                let impText = impList.length > 0 ? impList.join(', ') : "ไม่มี";
+
+                let txList = []; TX_ITEMS.forEach((tx, i) => { if(document.getElementById(`chk-tx-${i}`).checked) txList.push(tx); });
+                let medList = []; MED_ITEMS.forEach((med, i) => { 
+                    if(document.getElementById(`chk-med-${i}`).checked) {
+                        let dose = document.getElementById(`dose-med-${i}`).value || "ไม่ได้ระบุ Dose";
+                        medList.push(`${med} (${dose})`);
+                    }
+                });
+                
+                let txText = txList.length > 0 ? txList.join(', ') : "-";
+                let medText = medList.length > 0 ? medList.join(', ') : "-";
+                let biScore = document.getElementById('bi-score-badge').innerText.split(' ')[1];
+
+                // จัดเรียงแบบ S.O.A.P Note
+                let note = `S: (CC/HPI) ${cc}\n`;
+                note += `O: Vitals: BP ${bp} mmHg, PR ${pr} /min\n`;
+                note += `   PE: ${peText}\n`;
+                note += `   Motor Power: ${mpText}\n`;
+                note += `A: ผู้ป่วย IMC (Barthel Index: ${biScore})\n`;
+                note += `   Impairment: ${impText}\n`;
+                note += `P: หัตถการ: ${txText}\n`;
+                note += `   จ่ายยา: ${medText}`;
+                
+                document.getElementById('hosxp-box').value = note; 
+                Swal.close(); 
+            }, 600);
         }
 
         function copyToHosXP() { let copyText = document.getElementById("hosxp-box"); copyText.select(); document.execCommand("copy"); Swal.fire({toast: true, position: 'top-end', icon: 'success', title: 'คัดลอกสำเร็จ', showConfirmButton: false, timer: 1500}); }
 
-        // 🚀 ฟังก์ชันบันทึกข้อมูล
+        // 🚀 ฟังก์ชันบันทึกข้อมูลเข้า Google Sheets
         async function saveAssessment() {
             Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
             
