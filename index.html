@@ -226,10 +226,11 @@
                             <div class="body-map-container">
                                 <div class="side-label label-right">ขวา (R)</div>
                                 <div class="side-label label-left">ซ้าย (L)</div>
-                                <select class="mp-select mp-ra" title="แขนขวา"><option>G 5</option><option>G 4</option><option>G 3</option><option>G 2</option><option>G 1</option><option>G 0</option></select>
-                                <select class="mp-select mp-la" title="แขนซ้าย"><option>G 5</option><option>G 4</option><option>G 3</option><option>G 2</option><option>G 1</option><option>G 0</option></select>
-                                <select class="mp-select mp-rl" title="ขาขวา"><option>G 5</option><option>G 4</option><option>G 3</option><option>G 2</option><option>G 1</option><option>G 0</option></select>
-                                <select class="mp-select mp-ll" title="ขาซ้าย"><option>G 5</option><option>G 4</option><option>G 3</option><option>G 2</option><option>G 1</option><option>G 0</option></select>
+                                <!-- เปลี่ยนเป็นเลขโรมัน I II III IV V -->
+                                <select class="mp-select mp-ra" title="แขนขวา"><option>Grade V</option><option>Grade IV</option><option>Grade III</option><option>Grade II</option><option>Grade I</option><option>Grade 0</option></select>
+                                <select class="mp-select mp-la" title="แขนซ้าย"><option>Grade V</option><option>Grade IV</option><option>Grade III</option><option>Grade II</option><option>Grade I</option><option>Grade 0</option></select>
+                                <select class="mp-select mp-rl" title="ขาขวา"><option>Grade V</option><option>Grade IV</option><option>Grade III</option><option>Grade II</option><option>Grade I</option><option>Grade 0</option></select>
+                                <select class="mp-select mp-ll" title="ขาซ้าย"><option>Grade V</option><option>Grade IV</option><option>Grade III</option><option>Grade II</option><option>Grade I</option><option>Grade 0</option></select>
                             </div>
                         </div>
                         <div style="flex: 2; min-width: 300px;" id="bi-container"></div>
@@ -335,7 +336,6 @@
         const TX_ITEMS = ["นวดเพื่อการรักษา", "ประคบสมุนไพร", "อบไอน้ำสมุนไพร", "ทับหม้อเกลือ", "ฝังเข็ม", "ครอบแก้ว", "กัวซา"];
         const MED_ITEMS = ["ยาสหัสธาร", "ยาหอมเทพจิตร", "ยาแก้ลมแก้เส้น", "น้ำมันไพล", "ขี้ผึ้งไพล"];
 
-        // เปลี่ยนเป็นระบบ ADL 20 คะแนน
         const BI_ITEMS = [
             { q: "1. รับประทานอาหาร (Feeding)", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:1},{l:"ทำได้เอง",v:2}] },
             { q: "2. การล้างหน้า หวีผม แปรงฟัน (Grooming)", opts: [{l:"ทำไม่ได้",v:0},{l:"ทำได้เอง",v:1}] },
@@ -351,22 +351,13 @@
 
         // --- ฟังก์ชันวาด UI ---
         function renderDynamicForms() {
-            // PE
             let peHtml = ''; PE_ITEMS.forEach(item => { peHtml += `<div><label style="font-size:0.85rem;">${item}</label><select class="input-glass pe-select-box" style="padding:8px; margin-top:2px; margin-bottom:10px;"><option>ปกติ</option><option>อ่อนแรง</option><option>ติดขัด</option><option>ประเมินไม่ได้</option></select></div>`; }); document.getElementById('pe-container').innerHTML = peHtml;
-            // Impairment
             let impHtml = ''; IMPAIRMENTS.forEach(imp => { impHtml += `<div style="margin-bottom:10px;"><label class="imp-checkbox" onclick="toggleImpDetail('${imp.id}')"><input type="checkbox" id="chk-${imp.id}"> <span>${imp.title}</span></label><input type="text" id="detail-${imp.id}" class="input-glass imp-detail" placeholder="ระบุรายละเอียดเพิ่มเติม..."></div>`; }); document.getElementById('imp-container').innerHTML = impHtml;
-            // Barthel 20 pts
             let biHtml = ''; BI_ITEMS.forEach((item, idx) => { let radios = item.opts.map(opt => `<label class="bi-radio-label"><input type="radio" name="bi${idx}" value="${opt.v}" onchange="calcBI()"> ${opt.l} (${opt.v})</label>`).join(''); biHtml += `<div style="background:white; padding:12px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:10px;"><div style="font-weight:700; margin-bottom:8px;">${item.q}</div><div class="bi-radio-group">${radios}</div></div>`; }); document.getElementById('bi-container').innerHTML = biHtml;
             
-            // วาดหัตถการ (Checkbox)
             let txHtml = '<div style="display: flex; flex-wrap: wrap; gap: 10px;">';
-            TX_ITEMS.forEach((tx, idx) => {
-                txHtml += `<label class="imp-checkbox" style="padding: 8px 12px; border-radius: 50px;"><input type="checkbox" id="chk-tx-${idx}" value="${tx}"> <span>${tx}</span></label>`;
-            });
-            txHtml += '</div>';
-            document.getElementById('tx-container').innerHTML = txHtml;
+            TX_ITEMS.forEach((tx, idx) => { txHtml += `<label class="imp-checkbox" style="padding: 8px 12px; border-radius: 50px;"><input type="checkbox" id="chk-tx-${idx}" value="${tx}"> <span>${tx}</span></label>`; }); txHtml += '</div>'; document.getElementById('tx-container').innerHTML = txHtml;
 
-            // วาดการจ่ายยา (Checkbox + Dose Input)
             let medHtml = '<div style="display: flex; flex-direction: column; gap: 10px;">';
             MED_ITEMS.forEach((med, idx) => {
                 medHtml += `
@@ -377,21 +368,13 @@
                     <input type="text" id="dose-med-${idx}" class="input-glass" style="display:none; width: 100%; margin: 0; padding: 10px;" placeholder="ระบุวิธีทาน / Dose เช่น 1 แคปซูล หลังอาหาร เช้า-เย็น">
                 </div>`;
             });
-            medHtml += '</div>';
-            document.getElementById('med-container').innerHTML = medHtml;
+            medHtml += '</div>'; document.getElementById('med-container').innerHTML = medHtml;
         }
 
         function toggleAccordion(el) { el.parentElement.classList.toggle('active'); }
         function toggleImpDetail(id) { document.getElementById(`detail-${id}`).style.display = document.getElementById(`chk-${id}`).checked ? 'block' : 'none'; }
-        
-        // แสดงซ่อนช่อง Dose
-        function toggleMedDose(idx) {
-            const chk = document.getElementById(`chk-med-${idx}`);
-            const dose = document.getElementById(`dose-med-${idx}`);
-            dose.style.display = chk.checked ? 'block' : 'none';
-        }
+        function toggleMedDose(idx) { document.getElementById(`dose-med-${idx}`).style.display = document.getElementById(`chk-med-${idx}`).checked ? 'block' : 'none'; }
 
-        // คำนวณคะแนนเต็ม 20
         function calcBI() {
             let total = 0; for(let i=0; i<10; i++) { let sel = document.querySelector(`input[name="bi${i}"]:checked`); if(sel) total += parseInt(sel.value); }
             let badge = document.getElementById('bi-score-badge'); badge.innerText = `คะแนน: ${total}/20`;
@@ -405,46 +388,31 @@
 
         function mockLoadHistory() { Swal.fire({title: 'ดึงข้อมูลสำเร็จ', icon: 'success', timer: 1500, showConfirmButton: false}); document.querySelector(`input[name="bi0"][value="2"]`).checked = true; calcBI(); }
         
-        // AI Summary Update (ดึงข้อมูลจากการติ๊กหลายช่อง)
         function mockAISummary() {
             Swal.fire({title: 'AI กำลังวิเคราะห์...', didOpen: ()=>{Swal.showLoading()}});
-            
-            // รวบรวมข้อมูล Tx & Med
             let txList = []; TX_ITEMS.forEach((tx, i) => { if(document.getElementById(`chk-tx-${i}`).checked) txList.push(tx); });
             let medList = []; MED_ITEMS.forEach((med, i) => { if(document.getElementById(`chk-med-${i}`).checked) medList.push(med); });
-            
             setTimeout(() => { 
                 let text = `CC/HPI: ผู้ป่วย ${document.getElementById('frm-name').value} เข้ารับการฟื้นฟู IMC\n`;
                 text += `Motor Power: L (${document.querySelector('.mp-la').value}, ${document.querySelector('.mp-ll').value}) | R (${document.querySelector('.mp-ra').value}, ${document.querySelector('.mp-rl').value})\n`;
                 text += `BI Score: ${document.getElementById('bi-score-badge').innerText.split(' ')[1]} คะแนน\n`;
                 text += `Plan: ${txList.length > 0 ? txList.join(', ') : 'ไม่มี'} | จ่ายยา: ${medList.length > 0 ? medList.join(', ') : 'ไม่ได้จ่าย'}`;
-                
-                document.getElementById('hosxp-box').value = text; 
-                Swal.close(); 
+                document.getElementById('hosxp-box').value = text; Swal.close(); 
             }, 1000);
         }
 
         function copyToHosXP() { let copyText = document.getElementById("hosxp-box"); copyText.select(); document.execCommand("copy"); Swal.fire({toast: true, position: 'top-end', icon: 'success', title: 'คัดลอกสำเร็จ', showConfirmButton: false, timer: 1500}); }
 
-        // 🚀 ฟังก์ชันบันทึกข้อมูล (อัปเดตรูปแบบ Payload)
+        // 🚀 ฟังก์ชันบันทึกข้อมูล
         async function saveAssessment() {
             Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
             
             let peList = []; document.querySelectorAll('.pe-select-box').forEach((sel, i) => peList.push(PE_ITEMS[i] + ":" + sel.value));
             let impList = []; IMPAIRMENTS.forEach(imp => { if(document.getElementById(`chk-${imp.id}`).checked) impList.push(imp.title + " (" + document.getElementById(`detail-${imp.id}`).value + ")"); });
-
-            // ดึงค่าหัตถการที่ถูกเลือก
-            let txList = [];
-            TX_ITEMS.forEach((tx, i) => { if(document.getElementById(`chk-tx-${i}`).checked) txList.push(tx); });
-            
-            // ดึงค่ายาที่ถูกเลือก + Dose
-            let medList = [];
-            MED_ITEMS.forEach((med, i) => { 
+            let txList = []; TX_ITEMS.forEach((tx, i) => { if(document.getElementById(`chk-tx-${i}`).checked) txList.push(tx); });
+            let medList = []; MED_ITEMS.forEach((med, i) => { 
                 let chk = document.getElementById(`chk-med-${i}`);
-                if(chk.checked) {
-                    let dose = document.getElementById(`dose-med-${i}`).value || "ไม่ได้ระบุ Dose";
-                    medList.push(`${med} (${dose})`);
-                }
+                if(chk.checked) { let dose = document.getElementById(`dose-med-${i}`).value || "ไม่ได้ระบุ Dose"; medList.push(`${med} (${dose})`); }
             });
 
             let payload = {
@@ -463,13 +431,8 @@
             try {
                 let response = await fetch(WEBAPP_URL, { method: 'POST', body: JSON.stringify({ action: 'save_assessment', payload: payload }) });
                 let result = await response.json();
-                
-                if(result.status === 'success') {
-                    Swal.fire({title: 'บันทึกสำเร็จ!', text: 'ข้อมูลถูกส่งเข้า Google Sheets เรียบร้อย', icon: 'success'});
-                    closeAssessmentModal();
-                } else {
-                    Swal.fire({title: 'เกิดข้อผิดพลาด', text: result.message, icon: 'error'});
-                }
+                if(result.status === 'success') { Swal.fire({title: 'บันทึกสำเร็จ!', text: 'ข้อมูลถูกส่งเข้า Google Sheets เรียบร้อย', icon: 'success'}); closeAssessmentModal(); } 
+                else { Swal.fire({title: 'เกิดข้อผิดพลาด', text: result.message, icon: 'error'}); }
             } catch(error) { Swal.fire({title: 'เชื่อมต่อล้มเหลว', text: error.toString(), icon: 'error'}); }
         }
 
