@@ -68,51 +68,53 @@
         #login-section { width: 100%; max-width: 420px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 32px; padding: 40px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
         
         /* ======================================================== */
-        /* 📋 ASSESSMENT MODAL (Scrollable & Responsive)            */
+        /* 📋 ASSESSMENT MODAL */
         /* ======================================================== */
         .modal-full-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; animation: fadeIn 0.3s; }
-        .assessment-card { background: #f8fafc; width: 90vw; max-width: 900px; height: 90vh; max-height: 90vh; border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
-        .assessment-header { background: white; padding: 20px 30px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; z-index: 10; }
-        .assessment-body { padding: 30px; flex: 1; overflow-y: auto; display: block; }
+        
+        .assessment-card { 
+            background: #f8fafc; width: 90vw; max-width: 900px; 
+            height: 90vh; border-radius: 24px; display: flex; flex-direction: column; 
+            overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.2); 
+        }
+        
+        .assessment-header { 
+            background: white; padding: 20px 30px; border-bottom: 1px solid var(--border-color); 
+            display: flex; justify-content: space-between; align-items: center; 
+            flex-shrink: 0; z-index: 10; 
+        }
+        
+        .assessment-body { 
+            padding: 30px; flex: 1; overflow-y: auto; display: block; 
+        }
+        
         .assessment-body::-webkit-scrollbar { width: 8px; } 
         .assessment-body::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; } 
         .assessment-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; } 
         .assessment-body::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* Accordion */
         .accordion-item { background: white; border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; margin-bottom: 15px; }
         .accordion-header { padding: 18px 24px; background: white; font-weight: 700; font-size: 1.1rem; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .accordion-content { padding: 0 24px 24px 24px; display: none; border-top: 1px dashed var(--border-color); margin-top: 10px; padding-top: 20px; }
         .accordion-item.active .accordion-content { display: block; } .accordion-item.active .accordion-header { color: var(--primary); }
-        /* ======================================================== */
-
-        /* 🧍‍♂️ Motor Power Map (อัปเดตรูปคนสมมาตร & ล็อคสัดส่วน) */
+        
+        /* 🧍‍♂️ Motor Power Map */
         .body-map-container { 
-            position: relative; 
-            width: 100%; max-width: 200px; 
-            height: 300px; /* ลดความสูงลงเล็กน้อยให้พอดีจอ */
-            margin: 35px auto 20px; 
-            /* รหัสภาพ SVG รูปคนที่สมมาตรและสะอาดตา (ล็อคขนาดกว้าง 100px) */
+            position: relative; width: 100%; max-width: 200px; height: 300px; margin: 35px auto 20px; 
             background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'%3E%3Ccircle cx='12' cy='4' r='2.5'/%3E%3Cpath d='M15.5 8.5H8.5c-1.4 0-2.5 1.1-2.5 2.5v5c0 .6.4 1 1 1s1-.4 1-1v-4.5h1V20c0 .6.4 1 1 1s1-.4 1-1v-7h2v7c0 .6.4 1 1 1s1-.4 1-1v-8.5h1v4.5c0 .6.4 1 1 1s1-.4 1-1v-5c0-1.4-1.1-2.5-2.5-2.5z'/%3E%3C/svg%3E") center/100px auto no-repeat; 
         }
         
         .mp-select { position: absolute; padding: 4px; border-radius: 8px; border: 2px solid var(--primary); background: white; font-weight: 700; font-size: 0.9rem; color: var(--primary); outline: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        
-        /* จัดตำแหน่ง Anatomical (ซ้ายหน้าจอ = ขวาคนไข้) */
-        .mp-ra { top: 25%; left: -25px; } /* แขนขวา (หน้าจอซ้าย) */
-        .mp-rl { top: 65%; left: -5px; }  /* ขาขวา (หน้าจอซ้าย) */
-        .mp-la { top: 25%; right: -25px; } /* แขนซ้าย (หน้าจอขวา) */
-        .mp-ll { top: 65%; right: -5px; }  /* ขาซ้าย (หน้าจอขวา) */
-        
-        /* ป้ายกำกับซ้าย-ขวา */
+        .mp-ra { top: 25%; left: -25px; } .mp-rl { top: 65%; left: -5px; }  
+        .mp-la { top: 25%; right: -25px; } .mp-ll { top: 65%; right: -5px; }  
         .side-label { position: absolute; top: -30px; font-weight: 700; color: #0ea5e9; font-size: 0.9rem; background: #e0f2fe; padding: 2px 10px; border-radius: 12px; }
-        .label-right { left: -20px; }
-        .label-left { right: -20px; }
+        .label-right { left: -20px; } .label-left { right: -20px; }
 
         /* Checkbox & Grid */
         .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .imp-checkbox { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); cursor: pointer; font-weight: 500; transition: 0.2s; }
-        .imp-checkbox:hover { background: #f1f5f9; } .imp-checkbox input { transform: scale(1.3); accent-color: var(--primary); } .imp-detail { width: 100%; margin-top: 8px; display: none; }
+        .imp-checkbox:hover { background: #f1f5f9; } .imp-checkbox input { transform: scale(1.3); accent-color: var(--primary); cursor: pointer; } 
+        .imp-detail { width: 100%; margin-top: 8px; display: none; }
         .bi-radio-group { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; } .bi-radio-label { display: flex; align-items: center; gap: 8px; font-weight: 400; cursor: pointer; } .bi-radio-label input { accent-color: var(--primary); transform: scale(1.2); }
         
         /* Responsive */
@@ -176,6 +178,7 @@
 
     <div class="fab" onclick="openAssessmentModal()" id="fab-btn" style="display: none;"><i class="fa-solid fa-plus"></i></div>
 
+    <!-- 📋 MODAL ฟอร์มบันทึกอาการ -->
     <div id="assessmentModal" class="modal-full-overlay">
         <div class="assessment-card">
             
@@ -191,8 +194,10 @@
                 </div>
             </div>
 
+            <!-- Body -->
             <div class="assessment-body">
                 
+                <!-- 1 -->
                 <div class="accordion-item active">
                     <div class="accordion-header" onclick="toggleAccordion(this)"><span><i class="fa-solid fa-file-medical"></i> 1. ซักประวัติ & สัญญาณชีพ</span><i class="fa-solid fa-chevron-down"></i></div>
                     <div class="accordion-content">
@@ -206,45 +211,53 @@
                     </div>
                 </div>
 
+                <!-- 2 -->
                 <div class="accordion-item">
                     <div class="accordion-header" onclick="toggleAccordion(this)"><span><i class="fa-solid fa-stethoscope"></i> 2. ตรวจร่างกาย (Physical Exam)</span><i class="fa-solid fa-chevron-down"></i></div>
                     <div class="accordion-content"><div class="grid-2-col" id="pe-container"></div></div>
                 </div>
 
+                <!-- 3: Barthel Index 20 คะแนน (ADL) -->
                 <div class="accordion-item">
-                    <div class="accordion-header" onclick="toggleAccordion(this)"><span><i class="fa-solid fa-person-walking"></i> 3. กำลังกล้ามเนื้อ & Barthel Index <span id="bi-score-badge" style="background:#fef08a; color:#854d0e; padding:2px 8px; border-radius:10px; font-size:0.8rem; margin-left:10px;">คะแนน: 0/100</span></span><i class="fa-solid fa-chevron-down"></i></div>
+                    <div class="accordion-header" onclick="toggleAccordion(this)"><span><i class="fa-solid fa-person-walking"></i> 3. กำลังกล้ามเนื้อ & Barthel Index <span id="bi-score-badge" style="background:#fecaca; color:#991b1b; padding:2px 8px; border-radius:10px; font-size:0.8rem; margin-left:10px;">คะแนน: 0/20</span></span><i class="fa-solid fa-chevron-down"></i></div>
                     <div class="accordion-content" style="display: flex; gap: 20px; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 250px; background: #f8fafc; border-radius: 16px; padding: 10px;">
                             <h4 style="text-align: center; color: var(--primary);">ประเมิน Motor Power</h4>
-                            
                             <div class="body-map-container">
                                 <div class="side-label label-right">ขวา (R)</div>
                                 <div class="side-label label-left">ซ้าย (L)</div>
-
                                 <select class="mp-select mp-ra" title="แขนขวา"><option>G 5</option><option>G 4</option><option>G 3</option><option>G 2</option><option>G 1</option><option>G 0</option></select>
                                 <select class="mp-select mp-la" title="แขนซ้าย"><option>G 5</option><option>G 4</option><option>G 3</option><option>G 2</option><option>G 1</option><option>G 0</option></select>
                                 <select class="mp-select mp-rl" title="ขาขวา"><option>G 5</option><option>G 4</option><option>G 3</option><option>G 2</option><option>G 1</option><option>G 0</option></select>
                                 <select class="mp-select mp-ll" title="ขาซ้าย"><option>G 5</option><option>G 4</option><option>G 3</option><option>G 2</option><option>G 1</option><option>G 0</option></select>
                             </div>
-
                         </div>
                         <div style="flex: 2; min-width: 300px;" id="bi-container"></div>
                     </div>
                 </div>
 
+                <!-- 4 -->
                 <div class="accordion-item">
                     <div class="accordion-header" onclick="toggleAccordion(this)"><span><i class="fa-solid fa-triangle-exclamation"></i> 4. ปัญหา 7 ด้าน (Impairment)</span><i class="fa-solid fa-chevron-down"></i></div>
                     <div class="accordion-content" id="imp-container"></div>
                 </div>
 
+                <!-- 5: หัตถการและจ่ายยา (เลือกได้หลายข้อ + เพิ่ม Dose) -->
                 <div class="accordion-item">
                     <div class="accordion-header" onclick="toggleAccordion(this)"><span><i class="fa-solid fa-mortar-pestle"></i> 5. การรักษา & จ่ายยา</span><i class="fa-solid fa-chevron-down"></i></div>
                     <div class="accordion-content">
-                        <div class="grid-2-col">
-                            <div><label>หัตถการ</label><select id="frm-tx" class="input-glass" style="margin-bottom:10px;"><option>นวดประคบ</option><option>อบสมุนไพร</option></select></div>
-                            <div><label>จ่ายยา</label><select id="frm-med" class="input-glass" style="margin-bottom:10px;"><option>สหัสธาร</option><option>น้ำมันไพล</option></select></div>
+                        
+                        <div style="margin-bottom: 25px;">
+                            <label style="font-weight: 700; color: var(--primary);">หัตถการ (เลือกได้มากกว่า 1 รายการ)</label>
+                            <div id="tx-container" style="margin-top: 10px;"></div>
                         </div>
-                        <div style="background: #e0f2fe; padding: 15px; border-radius: 12px; margin-top: 15px;">
+                        
+                        <div style="margin-bottom: 10px;">
+                            <label style="font-weight: 700; color: var(--primary);">จ่ายยา (เลือกแล้วระบุ Dose)</label>
+                            <div id="med-container" style="margin-top: 10px;"></div>
+                        </div>
+
+                        <div style="background: #e0f2fe; padding: 15px; border-radius: 12px; margin-top: 25px;">
                             <label style="color: #0284c7; font-weight: 700;"><i class="fa-solid fa-robot"></i> สรุปข้อความสำหรับคัดลอกลง HosXP</label>
                             <textarea id="hosxp-box" class="input-glass" rows="4" style="margin-bottom: 10px; font-size: 0.9rem;" placeholder="กดปุ่ม AI หรือกดคัดลอก เพื่อสร้างข้อความอัตโนมัติ..."></textarea>
                             <div style="display: flex; gap: 10px; justify-content: flex-end;">
@@ -252,6 +265,7 @@
                                 <button class="btn-primary" onclick="saveAssessment()"><i class="fa-solid fa-save"></i> บันทึกลงฐานข้อมูล</button>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -259,6 +273,7 @@
         </div>
     </div>
 
+    <!-- Script ควบคุมการทำงาน -->
     <script>
         // 🚨 URL ของ GAS API ที่ได้จากการ Deploy 🚨
         const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbycgES6CM3jxEdm7lqYYLx3PJs09_ob4ZHjByMdL2RvofLz3pTZouDkknuBmq2NAnz4/exec";
@@ -313,62 +328,134 @@
             });
         }
 
+        // --- ชุดข้อมูลสำหรับสร้างหน้าจออัตโนมัติ ---
         const PE_ITEMS = ["คลำกล้ามเนื้อ", "การจับชีพจรข้อมือ/ข้อเท้า", "ข้อไหล่", "การตั้งศอก", "กำ/แบ/คว่ำ/หงายมือ", "ทดสอบแรงบีบมือ", "ชูแขนเหนือศีรษะ", "วัดส้นเท้า", "การกระดกข้อเท้า", "ทดสอบแรงถีบปลายเท้า", "ตั้งขาชันเข่า/เหยียดเข่า", "การตอบสนองผู้ป่วย"];
-        const IMPAIRMENTS = [
-            { id: "imp1", title: "1. ปัญหาด้านการสื่อสาร" }, { id: "imp2", title: "2. กลืนลำบาก" }, { id: "imp3", title: "3. ความรู้ความเข้าใจ/รับรู้" },
-            { id: "imp4", title: "4. ปัญหาการเคลื่อนไหว" }, { id: "imp5", title: "5. ปัญหาระบบปัสสาวะ" }, { id: "imp6", title: "6. ปัญหาระบบขับถ่าย" }, { id: "imp7", title: "7. กิจวัตรประจำวัน (ADL)" }
-        ];
+        const IMPAIRMENTS = [ { id: "imp1", title: "1. ปัญหาด้านการสื่อสาร" }, { id: "imp2", title: "2. กลืนลำบาก" }, { id: "imp3", title: "3. ความรู้ความเข้าใจ/รับรู้" }, { id: "imp4", title: "4. ปัญหาการเคลื่อนไหว" }, { id: "imp5", title: "5. ปัญหาระบบปัสสาวะ" }, { id: "imp6", title: "6. ปัญหาระบบขับถ่าย" }, { id: "imp7", title: "7. กิจวัตรประจำวัน (ADL)" } ];
+        
+        const TX_ITEMS = ["นวดเพื่อการรักษา", "ประคบสมุนไพร", "อบไอน้ำสมุนไพร", "ทับหม้อเกลือ", "ฝังเข็ม", "ครอบแก้ว", "กัวซา"];
+        const MED_ITEMS = ["ยาสหัสธาร", "ยาหอมเทพจิตร", "ยาแก้ลมแก้เส้น", "น้ำมันไพล", "ขี้ผึ้งไพล"];
+
+        // เปลี่ยนเป็นระบบ ADL 20 คะแนน
         const BI_ITEMS = [
-            { q: "1. รับประทานอาหาร", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:5},{l:"ทำได้เอง",v:10}] },
-            { q: "2. การล้างหน้า หวีผม แปรงฟัน", opts: [{l:"ทำไม่ได้",v:0},{l:"ทำได้เอง",v:5}] },
-            { q: "3. การอาบน้ำ", opts: [{l:"ทำไม่ได้",v:0},{l:"ทำได้เอง",v:5}] },
-            { q: "4. การสวมใส่เสื้อผ้า", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:5},{l:"ทำได้เอง",v:10}] },
-            { q: "5. การกลั้นอุจจาระ", opts: [{l:"กลั้นไม่ได้",v:0},{l:"กลั้นได้บางครั้ง",v:5},{l:"กลั้นได้ปกติ",v:10}] },
-            { q: "6. การกลั้นปัสสาวะ", opts: [{l:"กลั้นไม่ได้",v:0},{l:"กลั้นได้บางครั้ง",v:5},{l:"กลั้นได้ปกติ",v:10}] },
-            { q: "7. การใช้ห้องน้ำ", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:5},{l:"ทำได้เอง",v:10}] },
-            { q: "8. การลุกนั่งจากเตียง", opts: [{l:"ทำไม่ได้",v:0},{l:"ช่วยพยุงมาก",v:5},{l:"ช่วยพยุงเล็กน้อย",v:10},{l:"ทำได้เอง",v:15}] },
-            { q: "9. การเดินทางราบ", opts: [{l:"เดินไม่ได้",v:0},{l:"ใช้รถเข็น",v:5},{l:"มีคนช่วยพยุง",v:10},{l:"เดินได้เอง",v:15}] },
-            { q: "10. การขึ้นลงบันได", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:5},{l:"ทำได้เอง",v:10}] }
+            { q: "1. รับประทานอาหาร (Feeding)", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:1},{l:"ทำได้เอง",v:2}] },
+            { q: "2. การล้างหน้า หวีผม แปรงฟัน (Grooming)", opts: [{l:"ทำไม่ได้",v:0},{l:"ทำได้เอง",v:1}] },
+            { q: "3. การลุกนั่งจากเตียง (Transfer)", opts: [{l:"ทำไม่ได้",v:0},{l:"ช่วยพยุงมาก",v:1},{l:"ช่วยพยุงเล็กน้อย",v:2},{l:"ทำได้เอง",v:3}] },
+            { q: "4. การใช้ห้องน้ำ (Toilet use)", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:1},{l:"ทำได้เอง",v:2}] },
+            { q: "5. การเดินทางราบ (Mobility)", opts: [{l:"เดินไม่ได้",v:0},{l:"ใช้รถเข็น",v:1},{l:"มีคนช่วยพยุง",v:2},{l:"เดินได้เอง",v:3}] },
+            { q: "6. การสวมใส่เสื้อผ้า (Dressing)", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:1},{l:"ทำได้เอง",v:2}] },
+            { q: "7. การขึ้นลงบันได (Stairs)", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:1},{l:"ทำได้เอง",v:2}] },
+            { q: "8. การอาบน้ำ (Bathing)", opts: [{l:"ทำไม่ได้",v:0},{l:"ทำได้เอง",v:1}] },
+            { q: "9. การกลั้นอุจจาระ (Bowel)", opts: [{l:"กลั้นไม่ได้",v:0},{l:"กลั้นได้บางครั้ง",v:1},{l:"กลั้นได้ปกติ",v:2}] },
+            { q: "10. การกลั้นปัสสาวะ (Bladder)", opts: [{l:"กลั้นไม่ได้",v:0},{l:"กลั้นได้บางครั้ง",v:1},{l:"กลั้นได้ปกติ",v:2}] }
         ];
 
+        // --- ฟังก์ชันวาด UI ---
         function renderDynamicForms() {
+            // PE
             let peHtml = ''; PE_ITEMS.forEach(item => { peHtml += `<div><label style="font-size:0.85rem;">${item}</label><select class="input-glass pe-select-box" style="padding:8px; margin-top:2px; margin-bottom:10px;"><option>ปกติ</option><option>อ่อนแรง</option><option>ติดขัด</option><option>ประเมินไม่ได้</option></select></div>`; }); document.getElementById('pe-container').innerHTML = peHtml;
+            // Impairment
             let impHtml = ''; IMPAIRMENTS.forEach(imp => { impHtml += `<div style="margin-bottom:10px;"><label class="imp-checkbox" onclick="toggleImpDetail('${imp.id}')"><input type="checkbox" id="chk-${imp.id}"> <span>${imp.title}</span></label><input type="text" id="detail-${imp.id}" class="input-glass imp-detail" placeholder="ระบุรายละเอียดเพิ่มเติม..."></div>`; }); document.getElementById('imp-container').innerHTML = impHtml;
+            // Barthel 20 pts
             let biHtml = ''; BI_ITEMS.forEach((item, idx) => { let radios = item.opts.map(opt => `<label class="bi-radio-label"><input type="radio" name="bi${idx}" value="${opt.v}" onchange="calcBI()"> ${opt.l} (${opt.v})</label>`).join(''); biHtml += `<div style="background:white; padding:12px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:10px;"><div style="font-weight:700; margin-bottom:8px;">${item.q}</div><div class="bi-radio-group">${radios}</div></div>`; }); document.getElementById('bi-container').innerHTML = biHtml;
+            
+            // วาดหัตถการ (Checkbox)
+            let txHtml = '<div style="display: flex; flex-wrap: wrap; gap: 10px;">';
+            TX_ITEMS.forEach((tx, idx) => {
+                txHtml += `<label class="imp-checkbox" style="padding: 8px 12px; border-radius: 50px;"><input type="checkbox" id="chk-tx-${idx}" value="${tx}"> <span>${tx}</span></label>`;
+            });
+            txHtml += '</div>';
+            document.getElementById('tx-container').innerHTML = txHtml;
+
+            // วาดการจ่ายยา (Checkbox + Dose Input)
+            let medHtml = '<div style="display: flex; flex-direction: column; gap: 10px;">';
+            MED_ITEMS.forEach((med, idx) => {
+                medHtml += `
+                <div style="display: flex; flex-direction: column; gap: 5px; background: white; padding: 10px; border-radius: 12px; border: 1px solid var(--border-color);">
+                    <label class="imp-checkbox" style="border: none; padding: 0;">
+                        <input type="checkbox" id="chk-med-${idx}" value="${med}" onchange="toggleMedDose(${idx})"> <span>${med}</span>
+                    </label>
+                    <input type="text" id="dose-med-${idx}" class="input-glass" style="display:none; width: 100%; margin: 0; padding: 10px;" placeholder="ระบุวิธีทาน / Dose เช่น 1 แคปซูล หลังอาหาร เช้า-เย็น">
+                </div>`;
+            });
+            medHtml += '</div>';
+            document.getElementById('med-container').innerHTML = medHtml;
         }
 
         function toggleAccordion(el) { el.parentElement.classList.toggle('active'); }
         function toggleImpDetail(id) { document.getElementById(`detail-${id}`).style.display = document.getElementById(`chk-${id}`).checked ? 'block' : 'none'; }
+        
+        // แสดงซ่อนช่อง Dose
+        function toggleMedDose(idx) {
+            const chk = document.getElementById(`chk-med-${idx}`);
+            const dose = document.getElementById(`dose-med-${idx}`);
+            dose.style.display = chk.checked ? 'block' : 'none';
+        }
+
+        // คำนวณคะแนนเต็ม 20
         function calcBI() {
             let total = 0; for(let i=0; i<10; i++) { let sel = document.querySelector(`input[name="bi${i}"]:checked`); if(sel) total += parseInt(sel.value); }
-            let badge = document.getElementById('bi-score-badge'); badge.innerText = `คะแนน: ${total}/100`;
-            if(total <= 45) badge.style.background = '#fecaca'; else if(total <= 95) badge.style.background = '#fef08a'; else badge.style.background = '#dcfce7';
+            let badge = document.getElementById('bi-score-badge'); badge.innerText = `คะแนน: ${total}/20`;
+            if(total <= 4) { badge.style.background = '#fecaca'; badge.style.color = '#991b1b'; } // แดง (รุนแรง)
+            else if(total <= 11) { badge.style.background = '#fef08a'; badge.style.color = '#854d0e'; } // เหลือง (ปานกลาง)
+            else { badge.style.background = '#dcfce7'; badge.style.color = '#166534'; } // เขียว (เล็กน้อย/ปกติ)
         }
+
         function openAssessmentModal(name = "เคสใหม่ (Walk-in)") { document.getElementById('modal-patient-name').innerText = name; document.getElementById('frm-name').value = name === "เคสใหม่ (Walk-in)" ? "" : name; document.getElementById('assessmentModal').style.display = 'flex'; }
         function closeAssessmentModal() { document.getElementById('assessmentModal').style.display = 'none'; }
 
-        function mockLoadHistory() { Swal.fire({title: 'ดึงข้อมูลสำเร็จ', icon: 'success', timer: 1500, showConfirmButton: false}); document.querySelector(`input[name="bi0"][value="5"]`).checked = true; calcBI(); }
+        function mockLoadHistory() { Swal.fire({title: 'ดึงข้อมูลสำเร็จ', icon: 'success', timer: 1500, showConfirmButton: false}); document.querySelector(`input[name="bi0"][value="2"]`).checked = true; calcBI(); }
+        
+        // AI Summary Update (ดึงข้อมูลจากการติ๊กหลายช่อง)
         function mockAISummary() {
             Swal.fire({title: 'AI กำลังวิเคราะห์...', didOpen: ()=>{Swal.showLoading()}});
-            setTimeout(() => { document.getElementById('hosxp-box').value = `CC/HPI: ผู้ป่วย ${document.getElementById('frm-name').value} เข้ารับการฟื้นฟู IMC\nPE: กล้ามเนื้อปกติ, ชีพจรปกติ\nMotor Power: แขนซ้าย Grade 3, ขวา Grade 5\nBI Score: ${document.getElementById('bi-score-badge').innerText.split(' ')[1]}\nImpairment: มีปัญหาด้านการเคลื่อนไหว\nPlan: นวดประคบ, จ่ายยาสหัสธาร`; Swal.close(); }, 1000);
+            
+            // รวบรวมข้อมูล Tx & Med
+            let txList = []; TX_ITEMS.forEach((tx, i) => { if(document.getElementById(`chk-tx-${i}`).checked) txList.push(tx); });
+            let medList = []; MED_ITEMS.forEach((med, i) => { if(document.getElementById(`chk-med-${i}`).checked) medList.push(med); });
+            
+            setTimeout(() => { 
+                let text = `CC/HPI: ผู้ป่วย ${document.getElementById('frm-name').value} เข้ารับการฟื้นฟู IMC\n`;
+                text += `Motor Power: L (${document.querySelector('.mp-la').value}, ${document.querySelector('.mp-ll').value}) | R (${document.querySelector('.mp-ra').value}, ${document.querySelector('.mp-rl').value})\n`;
+                text += `BI Score: ${document.getElementById('bi-score-badge').innerText.split(' ')[1]} คะแนน\n`;
+                text += `Plan: ${txList.length > 0 ? txList.join(', ') : 'ไม่มี'} | จ่ายยา: ${medList.length > 0 ? medList.join(', ') : 'ไม่ได้จ่าย'}`;
+                
+                document.getElementById('hosxp-box').value = text; 
+                Swal.close(); 
+            }, 1000);
         }
+
         function copyToHosXP() { let copyText = document.getElementById("hosxp-box"); copyText.select(); document.execCommand("copy"); Swal.fire({toast: true, position: 'top-end', icon: 'success', title: 'คัดลอกสำเร็จ', showConfirmButton: false, timer: 1500}); }
 
-        // 🚀 ฟังก์ชันบันทึกข้อมูล
+        // 🚀 ฟังก์ชันบันทึกข้อมูล (อัปเดตรูปแบบ Payload)
         async function saveAssessment() {
             Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
             
             let peList = []; document.querySelectorAll('.pe-select-box').forEach((sel, i) => peList.push(PE_ITEMS[i] + ":" + sel.value));
             let impList = []; IMPAIRMENTS.forEach(imp => { if(document.getElementById(`chk-${imp.id}`).checked) impList.push(imp.title + " (" + document.getElementById(`detail-${imp.id}`).value + ")"); });
 
+            // ดึงค่าหัตถการที่ถูกเลือก
+            let txList = [];
+            TX_ITEMS.forEach((tx, i) => { if(document.getElementById(`chk-tx-${i}`).checked) txList.push(tx); });
+            
+            // ดึงค่ายาที่ถูกเลือก + Dose
+            let medList = [];
+            MED_ITEMS.forEach((med, i) => { 
+                let chk = document.getElementById(`chk-med-${i}`);
+                if(chk.checked) {
+                    let dose = document.getElementById(`dose-med-${i}`).value || "ไม่ได้ระบุ Dose";
+                    medList.push(`${med} (${dose})`);
+                }
+            });
+
             let payload = {
                 patientName: document.getElementById('frm-name').value || "ไม่ระบุชื่อ",
                 cc: document.getElementById('frm-cc').value, bp: document.getElementById('frm-bp').value, pr: document.getElementById('frm-pr').value,
                 peData: peList.join(' | '),
                 mp: { la: document.querySelector('.mp-la').value, ra: document.querySelector('.mp-ra').value, ll: document.querySelector('.mp-ll').value, rl: document.querySelector('.mp-rl').value },
-                biScore: document.getElementById('bi-score-badge').innerText.split(' ')[1] || "0/100",
+                biScore: document.getElementById('bi-score-badge').innerText.split(' ')[1] || "0/20",
                 impData: impList.length > 0 ? impList.join(' | ') : "ไม่มีปัญหา",
-                tx: document.getElementById('frm-tx').value, med: document.getElementById('frm-med').value,
+                tx: txList.length > 0 ? txList.join(', ') : "ไม่ได้ระบุ",
+                med: medList.length > 0 ? medList.join(', ') : "ไม่ได้ระบุ",
                 summary: document.getElementById('hosxp-box').value,
                 assessor: document.getElementById('username').value
             };
