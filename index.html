@@ -10,26 +10,15 @@
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     
     <style>
-        /* 🎨 DESIGN SYSTEM */
-        :root {
-            --primary: #2e7d32; --primary-light: #e8f5e9; --secondary: #0ea5e9;
-            --bg-app: #f8fafc; --bg-card: #ffffff; --text-main: #1e293b;
-            --text-sub: #64748b; --border-color: #e2e8f0;
-        }
+        /* 🎨 DESIGN SYSTEM & CORE STYLES */
+        :root { --primary: #2e7d32; --primary-light: #e8f5e9; --secondary: #0ea5e9; --bg-app: #f8fafc; --bg-card: #ffffff; --text-main: #1e293b; --text-sub: #64748b; --border-color: #e2e8f0; }
         * { box-sizing: border-box; font-family: 'Prompt', sans-serif; margin: 0; padding: 0; }
-        body {
-            background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=2000');
-            background-size: cover; background-position: center; background-attachment: fixed;
-            min-height: 100vh; display: flex; justify-content: center; align-items: center; color: var(--text-main);
-        }
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(224,242,254,0.6) 100%); z-index: -1;
-        }
-
-        /* 🪟 APP WINDOW & SIDEBAR */
+        body { background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=2000'); background-size: cover; background-position: center; background-attachment: fixed; min-height: 100vh; display: flex; justify-content: center; align-items: center; color: var(--text-main); }
+        body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(224,242,254,0.6) 100%); z-index: -1; }
+        
         #app-wrapper { width: 95vw; max-width: 1400px; height: 90vh; background: var(--bg-app); border-radius: 32px; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.2); border: 1px solid rgba(255, 255, 255, 0.9); overflow: hidden; display: none; animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
         .sidebar { width: 260px; background: #ffffff; border-right: 1px solid var(--border-color); padding: 30px 20px; display: flex; flex-direction: column; }
         .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; padding: 0 10px; }
         .brand img { width: 45px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
@@ -39,7 +28,6 @@
         .nav-item:hover { background: #f1f5f9; color: var(--text-main); }
         .nav-item.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
 
-        /* 📊 MAIN DASHBOARD AREA */
         .main-content { flex: 1; padding: 40px; overflow-y: auto; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .user-profile { display: flex; align-items: center; gap: 15px; background: #ffffff; padding: 8px 16px 8px 8px; border-radius: 50px; border: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
@@ -56,7 +44,6 @@
         .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
         .bg-green { background: #dcfce7; color: #166534; } .bg-yellow { background: #fef08a; color: #854d0e; } .bg-red { background: #fee2e2; color: #991b1b; } .bg-time { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
 
-        /* 🔘 BUTTONS & INPUTS */
         .btn-primary { padding: 10px 20px; border-radius: 14px; background: var(--primary); color: white; border: none; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2); }
         .btn-primary:hover { background: #1b5e20; transform: translateY(-2px); }
         .btn-outline { padding: 8px 16px; border-radius: 12px; background: transparent; color: var(--primary); border: 2px solid var(--primary); font-weight: 600; cursor: pointer; transition: 0.2s; }
@@ -68,61 +55,44 @@
         .input-glass:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15); }
         #login-section { width: 100%; max-width: 420px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 32px; padding: 40px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
         
-        /* ======================================================== */
         /* 📋 ASSESSMENT MODAL */
-        /* ======================================================== */
         .modal-full-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; animation: fadeIn 0.3s; }
         .assessment-card { background: #f8fafc; width: 90vw; max-width: 900px; height: 90vh; border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
         .assessment-header { background: white; padding: 20px 30px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; z-index: 10; }
         .assessment-body { padding: 30px; flex: 1; overflow-y: auto; display: block; }
-        .assessment-body::-webkit-scrollbar { width: 8px; } 
-        .assessment-body::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; } 
-        .assessment-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; } 
-        .assessment-body::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
+        .assessment-body::-webkit-scrollbar { width: 8px; } .assessment-body::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; } .assessment-body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; } .assessment-body::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .accordion-item { background: white; border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; margin-bottom: 15px; }
         .accordion-header { padding: 18px 24px; background: white; font-weight: 700; font-size: 1.1rem; color: #1e293b; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .accordion-content { padding: 0 24px 24px 24px; display: none; border-top: 1px dashed var(--border-color); margin-top: 10px; padding-top: 20px; }
         .accordion-item.active .accordion-content { display: block; } .accordion-item.active .accordion-header { color: var(--primary); }
         
-        /* 🧍‍♂️ Motor Power Map */
-        .body-map-container { 
-            position: relative; width: 100%; max-width: 200px; height: 300px; margin: 35px auto 20px; 
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'%3E%3Ccircle cx='12' cy='4' r='2.5'/%3E%3Cpath d='M15.5 8.5H8.5c-1.4 0-2.5 1.1-2.5 2.5v5c0 .6.4 1 1 1s1-.4 1-1v-4.5h1V20c0 .6.4 1 1 1s1-.4 1-1v-7h2v7c0 .6.4 1 1 1s1-.4 1-1v-8.5h1v4.5c0 .6.4 1 1 1s1-.4 1-1v-5c0-1.4-1.1-2.5-2.5-2.5z'/%3E%3C/svg%3E") center/100px auto no-repeat; 
-        }
-        
+        .body-map-container { position: relative; width: 100%; max-width: 200px; height: 300px; margin: 35px auto 20px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'%3E%3Ccircle cx='12' cy='4' r='2.5'/%3E%3Cpath d='M15.5 8.5H8.5c-1.4 0-2.5 1.1-2.5 2.5v5c0 .6.4 1 1 1s1-.4 1-1v-4.5h1V20c0 .6.4 1 1 1s1-.4 1-1v-7h2v7c0 .6.4 1 1 1s1-.4 1-1v-8.5h1v4.5c0 .6.4 1 1 1s1-.4 1-1v-5c0-1.4-1.1-2.5-2.5-2.5z'/%3E%3C/svg%3E") center/100px auto no-repeat; }
         .mp-select { position: absolute; padding: 4px; border-radius: 8px; border: 2px solid var(--primary); background: white; font-weight: 700; font-size: 0.9rem; color: var(--primary); outline: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .mp-ra { top: 25%; left: -25px; } .mp-rl { top: 65%; left: -5px; }  
-        .mp-la { top: 25%; right: -25px; } .mp-ll { top: 65%; right: -5px; }  
+        .mp-ra { top: 25%; left: -25px; } .mp-rl { top: 65%; left: -5px; } .mp-la { top: 25%; right: -25px; } .mp-ll { top: 65%; right: -5px; }  
         .side-label { position: absolute; top: -30px; font-weight: 700; color: #0ea5e9; font-size: 0.9rem; background: #e0f2fe; padding: 2px 10px; border-radius: 12px; }
         .label-right { left: -20px; } .label-left { right: -20px; }
-
-        /* Checkbox & Grid */
         .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .imp-checkbox { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); cursor: pointer; font-weight: 500; transition: 0.2s; }
         .imp-checkbox:hover { background: #f1f5f9; } .imp-checkbox input { transform: scale(1.3); accent-color: var(--primary); cursor: pointer; } 
         .imp-detail { width: 100%; margin-top: 8px; display: none; }
         .bi-radio-group { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; } .bi-radio-label { display: flex; align-items: center; gap: 8px; font-weight: 400; cursor: pointer; } .bi-radio-label input { accent-color: var(--primary); transform: scale(1.2); }
         
-        /* Responsive */
         @media (max-width: 768px) { #app-wrapper { flex-direction: column; width: 100vw; height: 100vh; border-radius: 0; } .sidebar { width: 100%; padding: 20px; flex-direction: row; justify-content: space-between; border-right: none; border-bottom: 1px solid var(--border-color); } .nav-menu { display: none; } .bento-col-2 { grid-column: span 3; } .assessment-card { width: 100vw; height: 100vh; border-radius: 0; } .grid-2-col { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <!-- 🔐 Login Section -->
     <section id="login-section">
         <img src="https://github.com/TTMSADAO/ttmed-sadao-queue/blob/PIC/%E0%B9%82%E0%B8%A5%E0%B9%82%E0%B8%81%E0%B9%89%E0%B9%81%E0%B8%9C%E0%B8%99%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%99%E0%B8%A1%E0%B8%AB%E0%B8%B2%E0%B9%80%E0%B8%AA%E0%B8%99%E0%B9%88%E0%B8%AB%E0%B9%8C.png?raw=true" style="width: 100px; margin-bottom: 15px; border-radius: 50%;">
         <h2 style="color: var(--primary); margin-bottom: 5px;">ระบบติดตามผู้ป่วย IMC</h2>
         <p style="color: var(--text-sub); margin-bottom: 30px;">โรงพยาบาลสะเดา</p>
         <div style="text-align: left;">
             <label style="font-weight: 600;"><i class="fa-regular fa-user"></i> ชื่อผู้ใช้งาน (LINE Display Name)</label>
-            <input type="text" id="username" class="input-glass" placeholder="กำลังเชื่อมต่อ LINE..." value="Admin">
+            <input type="text" id="username" class="input-glass" placeholder="กำลังเชื่อมต่อ LINE..." value="พท.ทศพร">
         </div>
         <button id="btn-login" class="btn-primary" style="width: 100%; padding: 14px;" onclick="handleLogin()">เข้าสู่ระบบ</button>
     </section>
 
-    <!-- 🪟 App Wrapper -->
     <div id="app-wrapper">
         <aside class="sidebar">
             <div class="brand">
@@ -132,7 +102,7 @@
             <ul class="nav-menu">
                 <li class="nav-item active"><i class="fa-solid fa-chart-pie"></i> ภาพรวม</li>
                 <li class="nav-item"><i class="fa-solid fa-bed-pulse"></i> คนไข้ Active</li>
-                <li class="nav-item" style="margin-top: auto; color: #ef4444;"><i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ</li>
+                <li class="nav-item" style="margin-top: auto; color: #ef4444;" onclick="location.reload()"><i class="fa-solid fa-arrow-right-from-bracket"></i> รีเฟรชระบบ</li>
             </ul>
         </aside>
 
@@ -141,25 +111,33 @@
                 <div><h1 style="font-weight: 700;">ภาพรวมการทำงาน</h1><p style="color: var(--text-sub);"><i class="fa-regular fa-calendar"></i> <span id="current-date"></span></p></div>
                 <div class="user-profile">
                     <div style="text-align: right;">
-                        <h4 style="margin: 0; font-size: 0.9rem;">เจ้าหน้าที่</h4>
-                        <span style="font-size: 0.75rem; color: var(--primary);" id="user-profile-name">Admin</span>
+                        <h4 style="margin: 0; font-size: 0.9rem;">เจ้าหน้าที่แผนไทย</h4>
+                        <span style="font-size: 0.75rem; color: var(--primary);" id="user-profile-name">พท.ทศพร</span>
                     </div>
                     <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" id="user-profile-img">
                 </div>
             </header>
 
             <div class="bento-grid">
+                
+                <div class="clean-card bento-col-2">
+                    <div class="card-header"><div style="background: var(--primary-light); padding: 8px; border-radius: 12px; color: var(--primary);"><i class="fa-regular fa-calendar-check"></i></div> คิวนัดหมายวันนี้</div>
+                    <div class="patient-list" id="appointment-container" style="max-height: 250px; overflow-y: auto;">
+                        <p style="color: #94a3b8;"><i class="fa-solid fa-spinner fa-spin"></i> กำลังโหลดคิวนัดหมาย...</p>
+                    </div>
+                </div>
+
                 <div class="clean-card" style="display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
-                        <div class="card-header"><div style="background: #f1f5f9; padding: 8px; border-radius: 12px;"><i class="fa-solid fa-chart-line"></i></div> เคส Active ทั้งหมด</div>
+                        <div class="card-header"><div style="background: #f1f5f9; padding: 8px; border-radius: 12px;"><i class="fa-solid fa-chart-line"></i></div> เคส Active</div>
                         <h1 style="font-size: 4rem; color: var(--primary);" id="total-cases-display">0</h1>ราย
                     </div>
                 </div>
 
-                <div class="clean-card bento-col-2">
-                    <div class="card-header"><div style="background: #e0f2fe; padding: 8px; border-radius: 12px; color: #0284c7;"><i class="fa-solid fa-bed-pulse"></i></div> ผู้ป่วย IMC (ดึงจาก Firebase)</div>
-                    <div class="patient-list" id="active-patients-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-                        <p style="color: #94a3b8;">กำลังโหลดข้อมูล...</p>
+                <div class="clean-card bento-col-2" style="grid-column: span 3;">
+                    <div class="card-header"><div style="background: #e0f2fe; padding: 8px; border-radius: 12px; color: #0284c7;"><i class="fa-solid fa-bed-pulse"></i></div> ผู้ป่วย IMC (Active)</div>
+                    <div class="patient-list" id="active-patients-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+                        <p style="color: #94a3b8;">กำลังโหลดข้อมูลผู้ป่วย...</p>
                     </div>
                 </div>
             </div>
@@ -168,48 +146,39 @@
 
     <div class="fab" onclick="openAssessmentModal()" id="fab-btn" style="display: none;"><i class="fa-solid fa-plus"></i></div>
 
-    <!-- 📋 MODAL ฟอร์มบันทึกอาการ -->
     <div id="assessmentModal" class="modal-full-overlay">
         <div class="assessment-card">
-            
             <div class="assessment-header">
                 <div>
                     <h2 style="color: var(--primary); font-weight: 700;"><i class="fa-solid fa-notes-medical"></i> บันทึกประเมินอาการ</h2>
                     <p style="font-size: 0.85rem; color: var(--text-sub);" id="modal-patient-name">สร้างเคสใหม่ / Walk-in</p>
                 </div>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;">
-                    <!-- 🚨 อัปเดตปุ่มเรียกประวัติเดิม -->
                     <button class="btn-outline" onclick="loadHistory()"><i class="fa-solid fa-backward-fast"></i> ดึงประวัติเดิม</button>
-                    
-                    <button class="btn-ai" onclick="mockAISummary()"><i class="fa-solid fa-wand-magic-sparkles"></i> AI สรุปเนื้อหา</button>
+                    <button class="btn-ai" onclick="generateSOAP()"><i class="fa-solid fa-wand-magic-sparkles"></i> AI สรุปเนื้อหา</button>
                     <button class="btn-primary" style="background: #ef4444;" onclick="closeAssessmentModal()"><i class="fa-solid fa-times"></i> ปิด</button>
                 </div>
             </div>
 
-            <!-- Body -->
             <div class="assessment-body">
-                
-                <!-- 1 -->
                 <div class="accordion-item active">
                     <div class="accordion-header" onclick="toggleAccordion(this)"><span><i class="fa-solid fa-file-medical"></i> 1. ซักประวัติ & สัญญาณชีพ</span><i class="fa-solid fa-chevron-down"></i></div>
                     <div class="accordion-content">
                         <div class="grid-2-col">
-                            <div><label>ชื่อ-สกุล</label><input type="text" id="frm-name" class="input-glass" style="margin-bottom: 10px;"></div>
+                            <div><label>ชื่อ-สกุล <span style="color:red;">*</span></label><input type="text" id="frm-name" class="input-glass" style="margin-bottom: 10px;" required></div>
                             <div><label>วันที่วินิจฉัย (Dx Date)</label><input type="date" id="frm-dx" class="input-glass" style="margin-bottom: 10px;"></div>
-                            <div style="grid-column: span 2;"><label>อาการสำคัญ (CC) / การดำเนินโรค (HPI)</label><textarea id="frm-cc" class="input-glass" rows="2" style="margin-bottom: 10px;"></textarea></div>
-                            <div><label>ความดัน (BP)</label><input type="text" id="frm-bp" placeholder="120/80" class="input-glass" style="margin-bottom: 10px;"></div>
-                            <div><label>ชีพจร (PR)</label><input type="text" id="frm-pr" placeholder="80" class="input-glass" style="margin-bottom: 10px;"></div>
+                            <div style="grid-column: span 2;"><label>อาการสำคัญ (CC) / การดำเนินโรค (HPI) <span style="color:red;">*</span></label><textarea id="frm-cc" class="input-glass" rows="2" style="margin-bottom: 10px;"></textarea></div>
+                            <div><label>ความดัน (BP) <span style="color:red;">*</span></label><input type="text" id="frm-bp" placeholder="120/80" class="input-glass" style="margin-bottom: 10px;"></div>
+                            <div><label>ชีพจร (PR) <span style="color:red;">*</span></label><input type="text" id="frm-pr" placeholder="80" class="input-glass" style="margin-bottom: 10px;"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 2 -->
                 <div class="accordion-item">
                     <div class="accordion-header" onclick="toggleAccordion(this)"><span><i class="fa-solid fa-stethoscope"></i> 2. ตรวจร่างกาย (Physical Exam)</span><i class="fa-solid fa-chevron-down"></i></div>
                     <div class="accordion-content"><div class="grid-2-col" id="pe-container"></div></div>
                 </div>
 
-                <!-- 3: Barthel Index -->
                 <div class="accordion-item">
                     <div class="accordion-header" onclick="toggleAccordion(this)"><span><i class="fa-solid fa-person-walking"></i> 3. กำลังกล้ามเนื้อ & Barthel Index <span id="bi-score-badge" style="background:#fecaca; color:#991b1b; padding:2px 8px; border-radius:10px; font-size:0.8rem; margin-left:10px;">คะแนน: 0/20</span></span><i class="fa-solid fa-chevron-down"></i></div>
                     <div class="accordion-content" style="display: flex; gap: 20px; flex-wrap: wrap;">
@@ -228,64 +197,25 @@
                     </div>
                 </div>
 
-                <!-- 4 -->
                 <div class="accordion-item">
                     <div class="accordion-header" onclick="toggleAccordion(this)"><span><i class="fa-solid fa-triangle-exclamation"></i> 4. ปัญหา 7 ด้าน (Impairment)</span><i class="fa-solid fa-chevron-down"></i></div>
                     <div class="accordion-content" id="imp-container"></div>
                 </div>
 
-                <!-- 5 -->
                 <div class="accordion-item">
                     <div class="accordion-header" onclick="toggleAccordion(this)"><span><i class="fa-solid fa-mortar-pestle"></i> 5. การรักษา & จ่ายยา</span><i class="fa-solid fa-chevron-down"></i></div>
                     <div class="accordion-content">
-                        
-                        <div style="margin-bottom: 25px;">
-                            <label style="font-weight: 700; color: var(--primary);">หัตถการ (เลือกได้มากกว่า 1 รายการ)</label>
-                            <div id="tx-container" style="margin-top: 10px;"></div>
-                        </div>
-                        
-                        <div style="margin-bottom: 10px;">
-                            <label style="font-weight: 700; color: var(--primary);">จ่ายยา (เลือกแล้วระบุ Dose)</label>
-                            <div id="med-container" style="margin-top: 10px;"></div>
-                        </div>
+                        <div style="margin-bottom: 25px;"><label style="font-weight: 700; color: var(--primary);">หัตถการ (เลือกได้มากกว่า 1 รายการ)</label><div id="tx-container" style="margin-top: 10px;"></div></div>
+                        <div style="margin-bottom: 10px;"><label style="font-weight: 700; color: var(--primary);">จ่ายยา (เลือกแล้วระบุ Dose)</label><div id="med-container" style="margin-top: 10px;"></div></div>
 
-                        <!-- กล่องสรุป AI แยก 4 ช่อง (S.O.A.P) -->
                         <div style="background: #e0f2fe; padding: 20px; border-radius: 12px; margin-top: 25px;">
-                            <label style="color: #0284c7; font-weight: 700; display: block; margin-bottom: 15px; font-size: 1.1rem;">
-                                <i class="fa-solid fa-robot"></i> สรุปข้อความแยกหมวดหมู่ (SOAP Note)
-                            </label>
-                            
+                            <label style="color: #0284c7; font-weight: 700; display: block; margin-bottom: 15px; font-size: 1.1rem;"><i class="fa-solid fa-robot"></i> สรุปข้อความแยกหมวดหมู่ (SOAP Note)</label>
                             <div class="grid-2-col">
-                                <div style="background: white; padding: 12px; border-radius: 12px; border: 1px solid #bae6fd;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                        <span style="font-weight: 700; color: #0369a1;">Subjective (S)</span>
-                                        <button class="btn-outline" style="padding: 2px 10px; font-size: 0.8rem; color: #0284c7; border-color: #0284c7;" onclick="copySection('hosxp-s')"><i class="fa-regular fa-copy"></i> คัดลอก</button>
-                                    </div>
-                                    <textarea id="hosxp-s" class="input-glass" rows="2" style="margin: 0; font-size: 0.85rem;" placeholder="ข้อมูล S (CC/HPI)..."></textarea>
-                                </div>
-                                <div style="background: white; padding: 12px; border-radius: 12px; border: 1px solid #bae6fd;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                        <span style="font-weight: 700; color: #0369a1;">Objective (O)</span>
-                                        <button class="btn-outline" style="padding: 2px 10px; font-size: 0.8rem; color: #0284c7; border-color: #0284c7;" onclick="copySection('hosxp-o')"><i class="fa-regular fa-copy"></i> คัดลอก</button>
-                                    </div>
-                                    <textarea id="hosxp-o" class="input-glass" rows="4" style="margin: 0; font-size: 0.85rem;" placeholder="ข้อมูล O (Vitals, PE, Motor Power)..."></textarea>
-                                </div>
-                                <div style="background: white; padding: 12px; border-radius: 12px; border: 1px solid #bae6fd;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                        <span style="font-weight: 700; color: #0369a1;">Assessment (A)</span>
-                                        <button class="btn-outline" style="padding: 2px 10px; font-size: 0.8rem; color: #0284c7; border-color: #0284c7;" onclick="copySection('hosxp-a')"><i class="fa-regular fa-copy"></i> คัดลอก</button>
-                                    </div>
-                                    <textarea id="hosxp-a" class="input-glass" rows="3" style="margin: 0; font-size: 0.85rem;" placeholder="ข้อมูล A (BI Score, Impairment)..."></textarea>
-                                </div>
-                                <div style="background: white; padding: 12px; border-radius: 12px; border: 1px solid #bae6fd;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                        <span style="font-weight: 700; color: #0369a1;">Plan (P)</span>
-                                        <button class="btn-outline" style="padding: 2px 10px; font-size: 0.8rem; color: #0284c7; border-color: #0284c7;" onclick="copySection('hosxp-p')"><i class="fa-regular fa-copy"></i> คัดลอก</button>
-                                    </div>
-                                    <textarea id="hosxp-p" class="input-glass" rows="3" style="margin: 0; font-size: 0.85rem;" placeholder="ข้อมูล P (หัตถการ, จ่ายยา)..."></textarea>
-                                </div>
+                                <div style="background: white; padding: 12px; border-radius: 12px; border: 1px solid #bae6fd;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><span style="font-weight: 700; color: #0369a1;">Subjective (S)</span><button class="btn-outline" style="padding: 2px 10px; font-size: 0.8rem; color: #0284c7; border-color: #0284c7;" onclick="copySection('hosxp-s')"><i class="fa-regular fa-copy"></i> คัดลอก</button></div><textarea id="hosxp-s" class="input-glass" rows="2" style="margin: 0; font-size: 0.85rem;" placeholder="ข้อมูล S (CC/HPI)..."></textarea></div>
+                                <div style="background: white; padding: 12px; border-radius: 12px; border: 1px solid #bae6fd;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><span style="font-weight: 700; color: #0369a1;">Objective (O)</span><button class="btn-outline" style="padding: 2px 10px; font-size: 0.8rem; color: #0284c7; border-color: #0284c7;" onclick="copySection('hosxp-o')"><i class="fa-regular fa-copy"></i> คัดลอก</button></div><textarea id="hosxp-o" class="input-glass" rows="4" style="margin: 0; font-size: 0.85rem;" placeholder="ข้อมูล O (Vitals, PE, Motor Power)..."></textarea></div>
+                                <div style="background: white; padding: 12px; border-radius: 12px; border: 1px solid #bae6fd;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><span style="font-weight: 700; color: #0369a1;">Assessment (A)</span><button class="btn-outline" style="padding: 2px 10px; font-size: 0.8rem; color: #0284c7; border-color: #0284c7;" onclick="copySection('hosxp-a')"><i class="fa-regular fa-copy"></i> คัดลอก</button></div><textarea id="hosxp-a" class="input-glass" rows="3" style="margin: 0; font-size: 0.85rem;" placeholder="ข้อมูล A (BI Score, Impairment)..."></textarea></div>
+                                <div style="background: white; padding: 12px; border-radius: 12px; border: 1px solid #bae6fd;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;"><span style="font-weight: 700; color: #0369a1;">Plan (P)</span><button class="btn-outline" style="padding: 2px 10px; font-size: 0.8rem; color: #0284c7; border-color: #0284c7;" onclick="copySection('hosxp-p')"><i class="fa-regular fa-copy"></i> คัดลอก</button></div><textarea id="hosxp-p" class="input-glass" rows="3" style="margin: 0; font-size: 0.85rem;" placeholder="ข้อมูล P (หัตถการ, จ่ายยา)..."></textarea></div>
                             </div>
-
                             <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px;">
                                 <button class="btn-outline" style="border-color: #0284c7; color: #0284c7; font-weight: 700;" onclick="copyAllHosXP()"><i class="fa-solid fa-copy"></i> คัดลอกทั้งหมด</button>
                                 <button class="btn-primary" onclick="saveAssessment()"><i class="fa-solid fa-save"></i> บันทึกลงฐานข้อมูล</button>
@@ -299,15 +229,15 @@
         </div>
     </div>
 
-    <!-- Script ควบคุมการทำงาน -->
     <script>
         const LIFF_ID = "2010703222-A44hahJI"; 
         const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbycgES6CM3jxEdm7lqYYLx3PJs09_ob4ZHjByMdL2RvofLz3pTZouDkknuBmq2NAnz4/exec";
         const FIREBASE_URL = "https://sadao-queue-999c3-default-rtdb.asia-southeast1.firebasedatabase.app/imc_system.json?auth=SlZOzhD1MeHgDIBAwE972NB0EOw2YhO9VyiDoJDV";
         
-        document.getElementById('current-date').innerText = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+        let todayDate = new Date();
+        document.getElementById('current-date').innerText = todayDate.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
 
-        document.addEventListener("DOMContentLoaded", () => { initializeLiff(); });
+        document.addEventListener("DOMContentLoaded", () => { initializeLiff(); renderDynamicForms(); });
 
         async function initializeLiff() {
             try {
@@ -319,7 +249,8 @@
                     document.getElementById('user-profile-img').src = profile.pictureUrl;
                     if(liff.isInClient()) handleLogin();
                 } else {
-                    document.getElementById('username').value = "กรุณาเข้าสู่ระบบ";
+                    // Fallback สำหรับเปิดในคอม
+                    document.getElementById('username').value = "พท.ทศพร";
                 }
             } catch (err) { console.error("LIFF Init Error: ", err); }
         }
@@ -338,8 +269,49 @@
             try {
                 let response = await fetch(FIREBASE_URL);
                 let data = await response.json();
+                
                 if(data && data.active_patients) renderActivePatients(data.active_patients);
+                
+                // 🌟 ระบบคิวนัดหมาย (Appointment Sync)
+                if(data && data.appointments) renderAppointments(data.appointments);
+                else document.getElementById('appointment-container').innerHTML = '<p style="color: #94a3b8;">ไม่มีคิวนัดหมายวันนี้</p>';
+
             } catch (error) { console.error(error); }
+        }
+
+        function renderAppointments(appts) {
+            const container = document.getElementById('appointment-container');
+            container.innerHTML = '';
+            
+            // กรองเฉพาะนัดหมายของ "วันนี้"
+            let todayStr = Utilities_formatDateString(todayDate);
+            let todayAppts = appts.filter(a => a.Appt_Date === todayStr && a.Status !== "มาแล้ว");
+
+            if(todayAppts.length === 0) {
+                container.innerHTML = '<p style="color: #94a3b8;">ไม่มีคิวตกค้างวันนี้</p>';
+                return;
+            }
+
+            todayAppts.forEach(a => {
+                container.innerHTML += `
+                    <div class="patient-item">
+                        <div class="patient-info">
+                            <div class="patient-avatar" style="background:#e0f2fe; color:#0284c7;">${a.FullName.charAt(0)}</div>
+                            <div>
+                                <h4 style="font-size: 1.05rem;">${a.FullName}</h4>
+                                <span class="status-badge bg-time" style="margin-top: 6px;"><i class="fa-regular fa-clock"></i> ${a.Appt_Time} น. (${a.Detail})</span>
+                            </div>
+                        </div>
+                        <button class="btn-outline" onclick="openAssessmentModal('${a.FullName}')">บันทึกตรวจ</button>
+                    </div>`;
+            });
+        }
+
+        function Utilities_formatDateString(d) {
+            let dd = String(d.getDate()).padStart(2, '0');
+            let mm = String(d.getMonth() + 1).padStart(2, '0');
+            let yyyy = d.getFullYear();
+            return dd + '/' + mm + '/' + yyyy;
         }
 
         function renderActivePatients(patients) {
@@ -375,39 +347,14 @@
         const IMPAIRMENTS = [ { id: "imp1", title: "1. ปัญหาด้านการสื่อสาร" }, { id: "imp2", title: "2. กลืนลำบาก" }, { id: "imp3", title: "3. ความรู้ความเข้าใจ/รับรู้" }, { id: "imp4", title: "4. ปัญหาการเคลื่อนไหว" }, { id: "imp5", title: "5. ปัญหาระบบปัสสาวะ" }, { id: "imp6", title: "6. ปัญหาระบบขับถ่าย" }, { id: "imp7", title: "7. กิจวัตรประจำวัน (ADL)" } ];
         const TX_ITEMS = ["นวดเพื่อการรักษา", "ประคบสมุนไพร", "อบไอน้ำสมุนไพร", "ทับหม้อเกลือ", "ฝังเข็ม", "ครอบแก้ว", "กัวซา"];
         const MED_ITEMS = ["ยาสหัสธาร", "ยาหอมเทพจิตร", "ยาแก้ลมแก้เส้น", "น้ำมันไพล", "ขี้ผึ้งไพล"];
-
-        const BI_ITEMS = [
-            { q: "1. รับประทานอาหาร (Feeding)", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:1},{l:"ทำได้เอง",v:2}] },
-            { q: "2. การล้างหน้า หวีผม แปรงฟัน (Grooming)", opts: [{l:"ทำไม่ได้",v:0},{l:"ทำได้เอง",v:1}] },
-            { q: "3. การลุกนั่งจากเตียง (Transfer)", opts: [{l:"ทำไม่ได้",v:0},{l:"ช่วยพยุงมาก",v:1},{l:"ช่วยพยุงเล็กน้อย",v:2},{l:"ทำได้เอง",v:3}] },
-            { q: "4. การใช้ห้องน้ำ (Toilet use)", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:1},{l:"ทำได้เอง",v:2}] },
-            { q: "5. การเดินทางราบ (Mobility)", opts: [{l:"เดินไม่ได้",v:0},{l:"ใช้รถเข็น",v:1},{l:"มีคนช่วยพยุง",v:2},{l:"เดินได้เอง",v:3}] },
-            { q: "6. การสวมใส่เสื้อผ้า (Dressing)", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:1},{l:"ทำได้เอง",v:2}] },
-            { q: "7. การขึ้นลงบันได (Stairs)", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:1},{l:"ทำได้เอง",v:2}] },
-            { q: "8. การอาบน้ำ (Bathing)", opts: [{l:"ทำไม่ได้",v:0},{l:"ทำได้เอง",v:1}] },
-            { q: "9. การกลั้นอุจจาระ (Bowel)", opts: [{l:"กลั้นไม่ได้",v:0},{l:"กลั้นได้บางครั้ง",v:1},{l:"กลั้นได้ปกติ",v:2}] },
-            { q: "10. การกลั้นปัสสาวะ (Bladder)", opts: [{l:"กลั้นไม่ได้",v:0},{l:"กลั้นได้บางครั้ง",v:1},{l:"กลั้นได้ปกติ",v:2}] }
-        ];
+        const BI_ITEMS = [ { q: "1. รับประทานอาหาร (Feeding)", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:1},{l:"ทำได้เอง",v:2}] }, { q: "2. การล้างหน้า หวีผม แปรงฟัน (Grooming)", opts: [{l:"ทำไม่ได้",v:0},{l:"ทำได้เอง",v:1}] }, { q: "3. การลุกนั่งจากเตียง (Transfer)", opts: [{l:"ทำไม่ได้",v:0},{l:"ช่วยพยุงมาก",v:1},{l:"ช่วยพยุงเล็กน้อย",v:2},{l:"ทำได้เอง",v:3}] }, { q: "4. การใช้ห้องน้ำ (Toilet use)", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:1},{l:"ทำได้เอง",v:2}] }, { q: "5. การเดินทางราบ (Mobility)", opts: [{l:"เดินไม่ได้",v:0},{l:"ใช้รถเข็น",v:1},{l:"มีคนช่วยพยุง",v:2},{l:"เดินได้เอง",v:3}] }, { q: "6. การสวมใส่เสื้อผ้า (Dressing)", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:1},{l:"ทำได้เอง",v:2}] }, { q: "7. การขึ้นลงบันได (Stairs)", opts: [{l:"ทำไม่ได้",v:0},{l:"ต้องมีคนช่วย",v:1},{l:"ทำได้เอง",v:2}] }, { q: "8. การอาบน้ำ (Bathing)", opts: [{l:"ทำไม่ได้",v:0},{l:"ทำได้เอง",v:1}] }, { q: "9. การกลั้นอุจจาระ (Bowel)", opts: [{l:"กลั้นไม่ได้",v:0},{l:"กลั้นได้บางครั้ง",v:1},{l:"กลั้นได้ปกติ",v:2}] }, { q: "10. การกลั้นปัสสาวะ (Bladder)", opts: [{l:"กลั้นไม่ได้",v:0},{l:"กลั้นได้บางครั้ง",v:1},{l:"กลั้นได้ปกติ",v:2}] } ];
 
         function renderDynamicForms() {
             let peHtml = ''; PE_ITEMS.forEach(item => { peHtml += `<div><label style="font-size:0.85rem;">${item}</label><select class="input-glass pe-select-box" style="padding:8px; margin-top:2px; margin-bottom:10px;"><option>ปกติ</option><option>อ่อนแรง</option><option>ติดขัด</option><option>ประเมินไม่ได้</option></select></div>`; }); document.getElementById('pe-container').innerHTML = peHtml;
             let impHtml = ''; IMPAIRMENTS.forEach(imp => { impHtml += `<div style="margin-bottom:10px;"><label class="imp-checkbox" onclick="toggleImpDetail('${imp.id}')"><input type="checkbox" id="chk-${imp.id}"> <span>${imp.title}</span></label><input type="text" id="detail-${imp.id}" class="input-glass imp-detail" placeholder="ระบุรายละเอียดเพิ่มเติม..."></div>`; }); document.getElementById('imp-container').innerHTML = impHtml;
             let biHtml = ''; BI_ITEMS.forEach((item, idx) => { let radios = item.opts.map(opt => `<label class="bi-radio-label"><input type="radio" name="bi${idx}" value="${opt.v}" onchange="calcBI()"> ${opt.l} (${opt.v})</label>`).join(''); biHtml += `<div style="background:white; padding:12px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:10px;"><div style="font-weight:700; margin-bottom:8px;">${item.q}</div><div class="bi-radio-group">${radios}</div></div>`; }); document.getElementById('bi-container').innerHTML = biHtml;
-            
-            let txHtml = '<div style="display: flex; flex-wrap: wrap; gap: 10px;">';
-            TX_ITEMS.forEach((tx, idx) => { txHtml += `<label class="imp-checkbox" style="padding: 8px 12px; border-radius: 50px;"><input type="checkbox" id="chk-tx-${idx}" value="${tx}"> <span>${tx}</span></label>`; }); txHtml += '</div>'; document.getElementById('tx-container').innerHTML = txHtml;
-
-            let medHtml = '<div style="display: flex; flex-direction: column; gap: 10px;">';
-            MED_ITEMS.forEach((med, idx) => {
-                medHtml += `
-                <div style="display: flex; flex-direction: column; gap: 5px; background: white; padding: 10px; border-radius: 12px; border: 1px solid var(--border-color);">
-                    <label class="imp-checkbox" style="border: none; padding: 0;">
-                        <input type="checkbox" id="chk-med-${idx}" value="${med}" onchange="toggleMedDose(${idx})"> <span>${med}</span>
-                    </label>
-                    <input type="text" id="dose-med-${idx}" class="input-glass" style="display:none; width: 100%; margin: 0; padding: 10px;" placeholder="ระบุวิธีทาน / Dose เช่น 1 แคปซูล หลังอาหาร เช้า-เย็น">
-                </div>`;
-            });
-            medHtml += '</div>'; document.getElementById('med-container').innerHTML = medHtml;
+            let txHtml = '<div style="display: flex; flex-wrap: wrap; gap: 10px;">'; TX_ITEMS.forEach((tx, idx) => { txHtml += `<label class="imp-checkbox" style="padding: 8px 12px; border-radius: 50px;"><input type="checkbox" id="chk-tx-${idx}" value="${tx}"> <span>${tx}</span></label>`; }); txHtml += '</div>'; document.getElementById('tx-container').innerHTML = txHtml;
+            let medHtml = '<div style="display: flex; flex-direction: column; gap: 10px;">'; MED_ITEMS.forEach((med, idx) => { medHtml += `<div style="display: flex; flex-direction: column; gap: 5px; background: white; padding: 10px; border-radius: 12px; border: 1px solid var(--border-color);"><label class="imp-checkbox" style="border: none; padding: 0;"><input type="checkbox" id="chk-med-${idx}" value="${med}" onchange="toggleMedDose(${idx})"> <span>${med}</span></label><input type="text" id="dose-med-${idx}" class="input-glass" style="display:none; width: 100%; margin: 0; padding: 10px;" placeholder="ระบุวิธีทาน / Dose เช่น 1 แคปซูล หลังอาหาร เช้า-เย็น"></div>`; }); medHtml += '</div>'; document.getElementById('med-container').innerHTML = medHtml;
         }
 
         function toggleAccordion(el) { el.parentElement.classList.toggle('active'); }
@@ -417,131 +364,80 @@
         function calcBI() {
             let total = 0; for(let i=0; i<10; i++) { let sel = document.querySelector(`input[name="bi${i}"]:checked`); if(sel) total += parseInt(sel.value); }
             let badge = document.getElementById('bi-score-badge'); badge.innerText = `คะแนน: ${total}/20`;
-            if(total <= 4) { badge.style.background = '#fecaca'; badge.style.color = '#991b1b'; } 
-            else if(total <= 11) { badge.style.background = '#fef08a'; badge.style.color = '#854d0e'; } 
-            else { badge.style.background = '#dcfce7'; badge.style.color = '#166534'; } 
+            if(total <= 4) { badge.style.background = '#fecaca'; badge.style.color = '#991b1b'; } else if(total <= 11) { badge.style.background = '#fef08a'; badge.style.color = '#854d0e'; } else { badge.style.background = '#dcfce7'; badge.style.color = '#166534'; } 
         }
 
         function openAssessmentModal(name = "เคสใหม่ (Walk-in)") { document.getElementById('modal-patient-name').innerText = name; document.getElementById('frm-name').value = name === "เคสใหม่ (Walk-in)" ? "" : name; document.getElementById('assessmentModal').style.display = 'flex'; }
         function closeAssessmentModal() { document.getElementById('assessmentModal').style.display = 'none'; }
         
-        // 🚀 1. ฟังก์ชันดึงประวัติจริงจากหลังบ้าน (Phase 7)
         async function loadHistory() {
             let pName = document.getElementById('frm-name').value;
             if(!pName || pName === "เคสใหม่ (Walk-in)") return Swal.fire('แจ้งเตือน', 'กรุณาระบุชื่อคนไข้ก่อนกดดึงประวัติครับ', 'warning');
-
             Swal.fire({title: 'กำลังค้นหาประวัติเดิม...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
-            
             try {
-                let response = await fetch(WEBAPP_URL, { 
-                    method: 'POST', 
-                    body: JSON.stringify({ action: 'get_history', payload: { patientName: pName } }) 
-                });
+                let response = await fetch(WEBAPP_URL, { method: 'POST', body: JSON.stringify({ action: 'get_history', payload: { patientName: pName } }) });
                 let res = await response.json();
-
                 if(res.status === 'success') {
                     let d = res.data;
-                    
-                    // เติม อาการสำคัญ (CC)
                     document.getElementById('frm-cc').value = d.cc;
-                    
-                    // เติม Motor Power ทั้ง 4 จุด
-                    document.querySelector('.mp-la').value = d.mp.la;
-                    document.querySelector('.mp-ra').value = d.mp.ra;
-                    document.querySelector('.mp-ll').value = d.mp.ll;
-                    document.querySelector('.mp-rl').value = d.mp.rl;
-
-                    Swal.fire('ดึงประวัติสำเร็จ!', `ข้อมูลล่าสุดเมื่อ: ${d.date}\n\n✔️ ดึงอาการสำคัญ และ Motor Power ให้แล้ว\n(คะแนน Barthel Index ประเมินใหม่ตามจริงนะครับ)`, 'success');
-                } else {
-                    Swal.fire('ไม่พบประวัติ', 'คนไข้รายนี้ยังไม่เคยมีประวัติการประเมินในระบบครับ', 'info');
-                }
-            } catch(e) {
-                Swal.fire('ข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้', 'error');
-            }
+                    document.querySelector('.mp-la').value = d.mp.la; document.querySelector('.mp-ra').value = d.mp.ra; document.querySelector('.mp-ll').value = d.mp.ll; document.querySelector('.mp-rl').value = d.mp.rl;
+                    Swal.fire('ดึงประวัติสำเร็จ!', `ข้อมูลล่าสุดเมื่อ: ${d.date}\n\n✔️ ดึงอาการสำคัญ และ Motor Power ให้แล้ว`, 'success');
+                } else { Swal.fire('ไม่พบประวัติ', 'คนไข้รายนี้ยังไม่เคยมีประวัติในระบบครับ', 'info'); }
+            } catch(e) { Swal.fire('ข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้', 'error'); }
         }
         
-        function mockAISummary() {
-            Swal.fire({title: 'AI กำลังแยกหมวดหมู่ข้อความ...', didOpen: ()=>{Swal.showLoading()}});
-            
+        function generateSOAP() {
+            Swal.fire({title: 'AI กำลังสรุปเนื้อหา...', didOpen: ()=>{Swal.showLoading()}});
             setTimeout(() => { 
-                let cc = document.getElementById('frm-cc').value || "-";
-                let bp = document.getElementById('frm-bp').value || "-";
-                let pr = document.getElementById('frm-pr').value || "-";
-
-                let peAbnormal = [];
-                document.querySelectorAll('.pe-select-box').forEach((sel, i) => {
-                    if(sel.value !== "ปกติ" && sel.value !== "ประเมินไม่ได้") peAbnormal.push(`${PE_ITEMS[i]}: ${sel.value}`);
-                });
+                let cc = document.getElementById('frm-cc').value || "-"; let bp = document.getElementById('frm-bp').value || "-"; let pr = document.getElementById('frm-pr').value || "-";
+                let peAbnormal = []; document.querySelectorAll('.pe-select-box').forEach((sel, i) => { if(sel.value !== "ปกติ" && sel.value !== "ประเมินไม่ได้") peAbnormal.push(`${PE_ITEMS[i]}: ${sel.value}`); });
                 let peText = peAbnormal.length > 0 ? peAbnormal.join(', ') : "ปกติทุกระบบ";
                 let mpText = `ขวา (แขน ${document.querySelector('.mp-ra').value}, ขา ${document.querySelector('.mp-rl').value}) | ซ้าย (แขน ${document.querySelector('.mp-la').value}, ขา ${document.querySelector('.mp-ll').value})`;
-
-                let impList = [];
-                IMPAIRMENTS.forEach(imp => { 
-                    if(document.getElementById(`chk-${imp.id}`).checked) {
-                        let detail = document.getElementById(`detail-${imp.id}`).value;
-                        let title = imp.title.split('.')[1].trim(); 
-                        impList.push(detail ? `${title}(${detail})` : title);
-                    }
-                });
+                let impList = []; IMPAIRMENTS.forEach(imp => { if(document.getElementById(`chk-${imp.id}`).checked) { let detail = document.getElementById(`detail-${imp.id}`).value; let title = imp.title.split('.')[1].trim(); impList.push(detail ? `${title}(${detail})` : title); } });
                 let impText = impList.length > 0 ? impList.join(', ') : "ไม่มี";
-
                 let txList = []; TX_ITEMS.forEach((tx, i) => { if(document.getElementById(`chk-tx-${i}`).checked) txList.push(tx); });
-                let medList = []; MED_ITEMS.forEach((med, i) => { 
-                    if(document.getElementById(`chk-med-${i}`).checked) {
-                        let dose = document.getElementById(`dose-med-${i}`).value || "ไม่ได้ระบุ Dose";
-                        medList.push(`${med} (${dose})`);
-                    }
-                });
-                let txText = txList.length > 0 ? txList.join(', ') : "-";
-                let medText = medList.length > 0 ? medList.join(', ') : "-";
+                let medList = []; MED_ITEMS.forEach((med, i) => { if(document.getElementById(`chk-med-${i}`).checked) { let dose = document.getElementById(`dose-med-${i}`).value || "ไม่ได้ระบุ Dose"; medList.push(`${med} (${dose})`); } });
+                let txText = txList.length > 0 ? txList.join(', ') : "-"; let medText = medList.length > 0 ? medList.join(', ') : "-";
                 let biScore = document.getElementById('bi-score-badge').innerText.split(' ')[1];
 
                 document.getElementById('hosxp-s').value = `(CC/HPI) ${cc}`;
                 document.getElementById('hosxp-o').value = `Vitals: BP ${bp} mmHg, PR ${pr} /min\nPE: ${peText}\nMotor Power: ${mpText}`;
                 document.getElementById('hosxp-a').value = `ผู้ป่วย IMC (Barthel Index: ${biScore} คะแนน)\nImpairment: ${impText}`;
                 document.getElementById('hosxp-p').value = `หัตถการ: ${txText}\nจ่ายยา: ${medText}`;
-                
                 Swal.close(); 
             }, 800);
         }
 
-        function copySection(elementId) { 
-            let copyText = document.getElementById(elementId); 
-            copyText.select(); document.execCommand("copy"); 
-            Swal.fire({toast: true, position: 'top-end', icon: 'success', title: 'คัดลอกส่วนนี้แล้ว', showConfirmButton: false, timer: 1200}); 
-        }
-
-        function copyAllHosXP() {
-            let fullNote = `S: ${document.getElementById('hosxp-s').value}\nO: ${document.getElementById('hosxp-o').value}\nA: ${document.getElementById('hosxp-a').value}\nP: ${document.getElementById('hosxp-p').value}`;
-            let temp = document.createElement("textarea");
-            temp.value = fullNote; document.body.appendChild(temp); temp.select(); document.execCommand("copy"); document.body.removeChild(temp);
-            Swal.fire({toast: true, position: 'top-end', icon: 'success', title: 'คัดลอกทั้งหมดสำเร็จ', showConfirmButton: false, timer: 1500}); 
-        }
+        function copySection(elementId) { let copyText = document.getElementById(elementId); copyText.select(); document.execCommand("copy"); Swal.fire({toast: true, position: 'top-end', icon: 'success', title: 'คัดลอกส่วนนี้แล้ว', showConfirmButton: false, timer: 1200}); }
+        function copyAllHosXP() { let fullNote = `S: ${document.getElementById('hosxp-s').value}\nO: ${document.getElementById('hosxp-o').value}\nA: ${document.getElementById('hosxp-a').value}\nP: ${document.getElementById('hosxp-p').value}`; let temp = document.createElement("textarea"); temp.value = fullNote; document.body.appendChild(temp); temp.select(); document.execCommand("copy"); document.body.removeChild(temp); Swal.fire({toast: true, position: 'top-end', icon: 'success', title: 'คัดลอกทั้งหมดสำเร็จ', showConfirmButton: false, timer: 1500}); }
 
         async function saveAssessment() {
+            // 🚨 ระบบป้องกันการกดบันทึกโดยไม่กรอกข้อมูล (Form Validation)
+            let pName = document.getElementById('frm-name').value;
+            let pCC = document.getElementById('frm-cc').value;
+            let pBP = document.getElementById('frm-bp').value;
+            
+            if(!pName || pName === "เคสใหม่ (Walk-in)") return Swal.fire('เกิดข้อผิดพลาด', 'กรุณาระบุชื่อ-สกุลผู้ป่วย', 'warning');
+            if(!pCC) return Swal.fire('เกิดข้อผิดพลาด', 'กรุณากรอกอาการสำคัญ (CC/HPI)', 'warning');
+            if(!pBP) return Swal.fire('เกิดข้อผิดพลาด', 'กรุณากรอกความดันโลหิต (BP)', 'warning');
+
             Swal.fire({title: 'กำลังบันทึกข้อมูล...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
             
             let peList = []; document.querySelectorAll('.pe-select-box').forEach((sel, i) => peList.push(PE_ITEMS[i] + ":" + sel.value));
             let impList = []; IMPAIRMENTS.forEach(imp => { if(document.getElementById(`chk-${imp.id}`).checked) impList.push(imp.title + " (" + document.getElementById(`detail-${imp.id}`).value + ")"); });
             let txList = []; TX_ITEMS.forEach((tx, i) => { if(document.getElementById(`chk-tx-${i}`).checked) txList.push(tx); });
-            let medList = []; MED_ITEMS.forEach((med, i) => { 
-                let chk = document.getElementById(`chk-med-${i}`);
-                if(chk.checked) { let dose = document.getElementById(`dose-med-${i}`).value || "ไม่ได้ระบุ Dose"; medList.push(`${med} (${dose})`); }
-            });
+            let medList = []; MED_ITEMS.forEach((med, i) => { if(document.getElementById(`chk-med-${i}`).checked) { let dose = document.getElementById(`dose-med-${i}`).value || "ไม่ได้ระบุ Dose"; medList.push(`${med} (${dose})`); } });
 
             let combinedSummary = `S: ${document.getElementById('hosxp-s').value}\nO: ${document.getElementById('hosxp-o').value}\nA: ${document.getElementById('hosxp-a').value}\nP: ${document.getElementById('hosxp-p').value}`;
 
             let payload = {
-                patientName: document.getElementById('frm-name').value || "ไม่ระบุชื่อ",
-                cc: document.getElementById('frm-cc').value, bp: document.getElementById('frm-bp').value, pr: document.getElementById('frm-pr').value,
+                patientName: pName, cc: pCC, bp: pBP, pr: document.getElementById('frm-pr').value,
                 peData: peList.join(' | '),
                 mp: { la: document.querySelector('.mp-la').value, ra: document.querySelector('.mp-ra').value, ll: document.querySelector('.mp-ll').value, rl: document.querySelector('.mp-rl').value },
                 biScore: document.getElementById('bi-score-badge').innerText.split(' ')[1] || "0/20",
                 impData: impList.length > 0 ? impList.join(' | ') : "ไม่มีปัญหา",
-                tx: txList.length > 0 ? txList.join(', ') : "ไม่ได้ระบุ",
-                med: medList.length > 0 ? medList.join(', ') : "ไม่ได้ระบุ",
-                summary: combinedSummary,
-                assessor: document.getElementById('username').value
+                tx: txList.length > 0 ? txList.join(', ') : "ไม่ได้ระบุ", med: medList.length > 0 ? medList.join(', ') : "ไม่ได้ระบุ",
+                summary: combinedSummary, assessor: document.getElementById('username').value
             };
 
             try {
@@ -551,8 +447,6 @@
                 else { Swal.fire({title: 'เกิดข้อผิดพลาด', text: result.message, icon: 'error'}); }
             } catch(error) { Swal.fire({title: 'เชื่อมต่อล้มเหลว', text: error.toString(), icon: 'error'}); }
         }
-
-        renderDynamicForms();
     </script>
 </body>
 </html>
